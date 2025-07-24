@@ -1,28 +1,30 @@
+buildscript {
+	ext {
+		queryDslVersion = "5.0.0"
+		queryDslClassifier = "jakarta"
+	}
+}
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.5.3'
 	id 'io.spring.dependency-management' version '1.1.7'
+	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
-
 group = 'com.cy'
 version = '0.0.1-SNAPSHOT'
-
 java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(17)
 	}
 }
-
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
 }
-
 repositories {
 	mavenCentral()
 }
-
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -32,8 +34,41 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	implementation 'org.springframework.security:spring-security-crypto:5.7.1'
-}
 
+	//querydsl 사용을 위한 depencendy 추가
+	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}:${queryDslClassifier}"
+	annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}:${queryDslClassifier}"
+
+//	implementation 'javax.annotation:javax.annotation-api:1.3.2'
+//	implementation 'javax.persistence:javax.persistence-api:2.2'
+	implementation 'jakarta.persistence:jakarta.persistence-api:3.1.0'
+	annotationProcessor 'jakarta.persistence:jakarta.persistence-api:3.1.0'
+
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	//q class생성되지않아 수정1
+	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+}
+// (4) queryDSL 추가 : QueryDSL 빌드 옵션
+def querydslDir = "$buildDir/generated/querydsl"
+
+querydsl {
+	jpa = true
+	querydslSourcesDir = querydslDir
+}
+sourceSets {
+	main.java.srcDir querydslDir
+}
+compileQuerydsl {
+	options.annotationProcessorPath = configurations.querydsl
+}
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+	querydsl.extendsFrom compileClasspath
+}
 tasks.named('test') {
 	useJUnitPlatform()
 }
