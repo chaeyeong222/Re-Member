@@ -1,6 +1,7 @@
 package com.cy.rememeber.service;
 
 import com.cy.rememeber.Entity.Customer;
+import com.cy.rememeber.dto.response.FindCustomerDto;
 import com.cy.rememeber.repository.CustomerRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -20,15 +21,16 @@ public class CustomerService {
     /**
      * 고객 조회 - 이름
      * */
-    public Customer getCustomer(String customerName){
-        return customerRepository.findByName(customerName).orElse(null);
+    public List<FindCustomerDto> getCustomer(String customerName){
+        return customerRepository.findByName(customerName);
     }
 
     /**
      * 고객 조회 - 번호
      * */
-    public Customer getPhone(String customerPhone){
-        return customerRepository.findByPhone(customerPhone).orElse(null);
+    public FindCustomerDto getPhone(String customerPhone){
+//        return customerRepository.findByPhone(customerPhone).orElse(null);
+        return customerRepository.findByPhone(customerPhone);
     }
 
 }

@@ -4,17 +4,22 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-
+import org.hibernate.annotations.DynamicInsert;
 @Entity
 @SuperBuilder
 @Table(name = "Customer")
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
+@AllArgsConstructor
+@DynamicInsert
 public class Customer {
     @Id
     @Column
@@ -23,5 +28,8 @@ public class Customer {
     private String customerPhone;
     private int visitCnt;
     private String memo;
-
 }
+
+
+
+
