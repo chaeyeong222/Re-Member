@@ -1,1 +1,6 @@
 application.properties
+# .gitignore
+src/main/resources/application.properties
+
+.idea/
+*.iml
