@@ -3,6 +3,8 @@ package com.cy.rememeber.Entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -22,17 +24,20 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class Store {
     @Id
     @Column
-    private long storeKey;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long storeKey;
+    @Column(unique = true, nullable = false)
     private String id;
+    @JsonIgnore
     private String password;
     private String email;
     private String name;
     @JsonIgnore
-    @OneToMany
+    @OneToMany(mappedBy = "store")
     private List<Customer> customerList;
     //비밀번호 암호화 메서드
-    public void passwordEncode(PasswordEncoder passwordEncoder) {
-        this.password = passwordEncoder.encode(this.password);
+    public void encodePassword(PasswordEncoder encoder) {
+        this.password = encoder.encode(this.password);
     }
 
 }

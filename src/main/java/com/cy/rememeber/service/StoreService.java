@@ -32,7 +32,7 @@ public class StoreService {
             .email(storeSignDto.getEmail())
             .password(storeSignDto.getPassword())
             .build();
-        store.passwordEncode(passwordEncoder);
+        store.encodePassword(passwordEncoder);
         storeRepository.save(store);
         return true;
     }
