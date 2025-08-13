@@ -1,5 +1,6 @@
 application.properties
 # .gitignore
+.idea/
 
 HELP.md
 .gradle

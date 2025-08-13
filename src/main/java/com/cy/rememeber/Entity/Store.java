@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
 @SuperBuilder
@@ -31,8 +31,8 @@ public class Store {
     @OneToMany
     private List<Customer> customerList;
     //비밀번호 암호화 메서드
-    public void passwordEncode(PasswordEncoder passwordEncoder) {
-        this.password = passwordEncoder.encode(this.password);
-    }
+//    public void passwordEncode(PasswordEncoder passwordEncoder) {
+//        this.password = passwordEncoder.encode(this.password);
+//    }
 
 }

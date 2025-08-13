@@ -5,7 +5,7 @@ import com.cy.rememeber.dto.StoreSignDto;
 import com.cy.rememeber.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class StoreService {
 
-    private final PasswordEncoder passwordEncoder;
+//    private final PasswordEncoder passwordEncoder;
     private final StoreRepository storeRepository;
 
     /**
@@ -32,7 +32,7 @@ public class StoreService {
             .email(storeSignDto.getEmail())
             .password(storeSignDto.getPassword())
             .build();
-        store.passwordEncode(passwordEncoder);
+//        store.passwordEncode(passwordEncoder);
         storeRepository.save(store);
         return true;
     }
