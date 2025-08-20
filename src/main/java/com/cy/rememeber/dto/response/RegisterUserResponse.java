@@ -1,5 +1,5 @@
 package com.cy.rememeber.dto.response;
 
-public class RegisterUserResponse {
+public record RegisterUserResponse(Long rank) {
 
 }
