@@ -52,6 +52,8 @@ dependencies {
 
 	//redis 사용을 위한 추가
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	testImplementation 'com.github.codemonstur:embedded-redis:1.0.0'
 }
 // (4) queryDSL 추가 : QueryDSL 빌드 옵션
 def querydslDir = "$buildDir/generated/querydsl"
