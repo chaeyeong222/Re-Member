@@ -1,11 +1,13 @@
 package com.cy.rememeber.controller;
 
 import com.cy.rememeber.dto.response.AllowUserResponse;
+import com.cy.rememeber.dto.response.AllowedUserResponse;
 import com.cy.rememeber.dto.response.RegisterUserResponse;
 import com.cy.rememeber.service.UserQueueService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,12 +31,24 @@ public class UserQueueController {
     }
 
     /**
-     * @Description 등록가능한지 확인
+     * @Description 진입허용
      * */
     @PostMapping("/allow")
     public ResponseEntity<AllowUserResponse> allowUser(@RequestParam(name = "queue", defaultValue = "default") String queue,
-    @RequestParam(name = "count") Long count) {
+                                                        @RequestParam(name = "count") Long count) {
         Long allowed = userQueueService.allowUser(queue, count);
         return ResponseEntity.ok(new AllowUserResponse(count, allowed));
     }
+
+    /**
+     * @Description 진입 가능한지 확인
+     * */
+    @GetMapping("/allowed")
+    public ResponseEntity<?> isAllowedUser(@RequestParam(name = "queue", defaultValue = "default") String queue,
+                                            @RequestParam(name = "user_id") Long userId){
+        boolean allowed = userQueueService.isAllowed(queue, userId);
+        return ResponseEntity.ok(new AllowedUserResponse(allowed));
+    }
+
+
 }

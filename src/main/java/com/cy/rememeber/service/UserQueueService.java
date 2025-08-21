@@ -35,12 +35,16 @@ public class UserQueueService {
         return (rank != null && rank >= 0) ? rank + 1 : -1;
     }
 
-    // 사용자 허용
+    /**
+     * @Description 진입허용
+     * @Param count: 몇 명의 사용자를 허용할 것인지
+     * */
     public Long allowUser(final String queue, final Long count) {
         ZSetOperations<String, String> zSetOps = redisTemplate.opsForZSet();
         String waitKey = USER_QUEUE_WAIT_KEY.formatted(queue);
         String proceedKey = USER_QUEUE_PROCEED_KEY.formatted(queue);
 
+        //해당 큐에서 value값이 작은 멤버 빼줌 -> 사용자 추가 (허용된 현재 시간)
         Set<TypedTuple<String>> popped = zSetOps.popMin(waitKey, count);
         long allowedCount = 0;
 
@@ -52,14 +56,18 @@ public class UserQueueService {
                 }
             }
         }
+
         return allowedCount;
     }
 
-    // 허용 여부 확인
+    /**
+     * @Description 진입이 가능한 상태인지 확인
+     * @Param
+     * */
     public boolean isAllowed(final String queue, final Long userId) {
         Long rank = redisTemplate.opsForZSet()
             .rank(USER_QUEUE_PROCEED_KEY.formatted(queue), userId.toString());
-        return rank != null && rank >= 0;
+        return rank != null && rank >= 0; //rank>=0 이면 등록됐다고 간주
     }
 
 }
