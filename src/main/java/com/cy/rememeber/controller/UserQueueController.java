@@ -2,6 +2,7 @@ package com.cy.rememeber.controller;
 
 import com.cy.rememeber.dto.response.AllowUserResponse;
 import com.cy.rememeber.dto.response.AllowedUserResponse;
+import com.cy.rememeber.dto.response.RankNumberResponse;
 import com.cy.rememeber.dto.response.RegisterUserResponse;
 import com.cy.rememeber.service.UserQueueService;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +49,14 @@ public class UserQueueController {
                                             @RequestParam(name = "user_id") Long userId){
         boolean allowed = userQueueService.isAllowed(queue, userId);
         return ResponseEntity.ok(new AllowedUserResponse(allowed));
+    }
+
+    /**
+     * @Description 대기번호 체크
+     * */
+    public ResponseEntity<?> getRank(final String queue, final Long userId){
+        Long rank = userQueueService.getRank(queue, userId);
+        return ResponseEntity.ok(new RankNumberResponse(rank));
     }
 
 

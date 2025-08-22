@@ -70,4 +70,14 @@ public class UserQueueService {
         return rank != null && rank >= 0; //rank>=0 이면 등록됐다고 간주
     }
 
+    /**
+     * @Description 순번조회
+     * */
+    public Long getRank(final String queue, final Long userId) {
+        Long rank = redisTemplate.opsForZSet()
+                .rank(USER_QUEUE_WAIT_KEY.formatted(queue), userId.toString());
+        return (rank != null && rank >= 0) ? rank + 1 : -1;
+//        return (rank != null && rank >= 0) ? rank + 1 : rank;
+    }
+
 }
