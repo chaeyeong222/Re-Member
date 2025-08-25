@@ -1,6 +1,9 @@
 package com.cy.rememeber.service;
 
 import com.cy.rememeber.Exception.ErrorCode;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
@@ -78,6 +81,25 @@ public class UserQueueService {
                 .rank(USER_QUEUE_WAIT_KEY.formatted(queue), userId.toString());
         return (rank != null && rank >= 0) ? rank + 1 : -1;
 //        return (rank != null && rank >= 0) ? rank + 1 : rank;
+    }
+
+    /**
+     * @Description 토큰생성
+     * */
+    public String generateToken(final String queue, final Long userId){
+        try{
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            var input = "user-queue-%s-%d".formatted(queue, userId);
+            byte[] encodeHash = digest.digest(input.getBytes(StandardCharsets.UTF_8));
+
+            StringBuilder hexString = new StringBuilder();
+            for(byte aByte : encodeHash){
+                hexString.append(String.format("%02x", aByte));
+            }
+            return hexString.toString();
+        }catch (NoSuchAlgorithmException e){
+            throw new RuntimeException(e);
+        }
     }
 
 }
