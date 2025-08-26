@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 고객관리
+ * */
 @RestController
 @CrossOrigin
 @Slf4j
@@ -20,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/customer")
 public class CustomerController {
     private final CustomerService customerService;
-
 
     @GetMapping("/findByPhone")
     public ResponseEntity<?> findByPhone(@RequestParam("customerPhone") String customerPhone) throws Exception{

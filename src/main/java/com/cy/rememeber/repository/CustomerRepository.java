@@ -8,14 +8,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
-//public interface CustomerRepository {
-@Transactional
-public interface CustomerRepository extends JpaRepository<Customer, Long> {
+//@Transactional
+//public interface CustomerRepository extends JpaRepository<Customer, Long> {
 //    Optional<Customer> findByName(String customerName);
 //    Optional<Customer> findByPhone(String customerPhone);
-    @Query(value = "select customer_name, customer_phone, visit_cnt, memo from customer where customer_phone=?", nativeQuery = true)
-    FindCustomerDto findByPhone(String customerPhone);
-
-    @Query(value = "select customer_name, customer_phone, visit_cnt, memo from customer where customer_name=?", nativeQuery = true)
-    List<FindCustomerDto> findByName(String customer_name);
-}
+//    @Query(value = "select customer_name, customer_phone, visit_cnt, memo from customer where customer_phone=?", nativeQuery = true)
+//    FindCustomerDto findByPhone(String customerPhone);
+//
+//    @Query(value = "select customer_name, customer_phone, visit_cnt, memo from customer where customer_name=?", nativeQuery = true)
+//    List<FindCustomerDto> findByName(String customer_name);
+//}
