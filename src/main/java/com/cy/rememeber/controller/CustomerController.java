@@ -26,7 +26,7 @@ public class CustomerController {
 
     @GetMapping("/findByPhone")
     public ResponseEntity<?> findByPhone(@RequestParam("customerPhone") String customerPhone) throws Exception{
-        FindCustomerDto customer = customerService.getPhone(customerPhone);
+        List<FindCustomerDto> customer = customerService.getPhone(customerPhone);
         return new ResponseEntity<>(customer, HttpStatus.OK);
     }
 
