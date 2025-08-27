@@ -49,7 +49,6 @@ public class OAuthService {
     }
 
 
-    // ¾×¼¼½º ÅäÅ«À¸·Î Ä«Ä«¿À ¼­¹ö¿¡¼­ À¯Àú Á¤º¸ ¹Þ¾Æ¿À±â
     public UserOauthInfoDto getUserInfo(String accessToken) throws JsonProcessingException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
@@ -76,8 +75,8 @@ public class OAuthService {
     }
 
     /**
-     * ±âÁ¸ È¸¿øÀÎÁö Ã¼Å©ÇÏ´Â ¸Þ¼­µå
-     * - JWT ¹ß±Þ ¾øÀÌ È¸¿ø ¿©ºÎ¸¸ È®ÀÎ
+     * ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã¼Å©ï¿½Ï´ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½
+     * - JWT ï¿½ß±ï¿½ ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ ï¿½ï¿½ï¿½Î¸ï¿½ È®ï¿½ï¿½
      */
 //    public UserOauthInfoDto checkRegistedUser(UserOauthInfoDto userInfo) {
 //        String socialId = userInfo.getSocial_id();
@@ -87,12 +86,12 @@ public class OAuthService {
 //        result.setSocial_id(socialId);
 //
 //        if (user != null) {
-//            // ±âÁ¸ È¸¿ø
-//            log.info("±âÁ¸ È¸¿ø ·Î±×ÀÎ : {}", socialId);
+//            // ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½
+//            log.info("ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ : {}", socialId);
 //            result.setNickName(user.getNickname());
 //            result.setUser(true);
 //        } else {
-//            // ½Å±Ô È¸¿ø: È¸¿ø°¡ÀÔ Ã³¸®(ÇÊ¿ä ½Ã ÄÁÆ®·Ñ·¯¿¡¼­ Ãß°¡)
+//            // ï¿½Å±ï¿½ È¸ï¿½ï¿½: È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½(ï¿½Ê¿ï¿½ ï¿½ï¿½ ï¿½ï¿½Æ®ï¿½Ñ·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½)
 //            result.setNickName(userInfo.getNickName());
 //            result.setUser(false);
 //        }

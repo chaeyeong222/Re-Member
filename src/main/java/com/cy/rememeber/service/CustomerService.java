@@ -1,8 +1,6 @@
 package com.cy.rememeber.service;
 
-import com.cy.rememeber.Entity.Customer;
 import com.cy.rememeber.dto.response.FindCustomerDto;
-import com.cy.rememeber.repository.CustomerRepository;
 import com.cy.rememeber.repository.QCustomerRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +11,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CustomerService {
-//    private final CustomerRepository customerRepository;
     private final QCustomerRepository QcustomerRepository;
 
     public List<FindCustomerDto> getCustomers(){
