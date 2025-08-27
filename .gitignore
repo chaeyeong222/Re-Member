@@ -44,3 +44,10 @@ out/
 /src/main/resources/application.yml
 src/main/resources/application.properties
 src/main/resources/application-core.properties
+
+# Reports, Logs
+build/reports/
+
+# Gradle
+.gradle/
+build/
