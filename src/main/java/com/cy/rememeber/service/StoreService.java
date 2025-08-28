@@ -27,7 +27,7 @@ public class StoreService {
         }
 
         Store store = Store.builder()
-            .id(storeSignDto.getId())
+//            .id(storeSignDto.getId())
             .name(storeSignDto.getName())
             .email(storeSignDto.getEmail())
             .password(storeSignDto.getPassword())

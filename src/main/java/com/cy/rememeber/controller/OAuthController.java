@@ -29,9 +29,8 @@ public class OAuthController {
         String accessToken = oAuthService.getKakaoAccessToken(code);
         UserOauthInfoDto userInfo = oAuthService.getUserInfo(accessToken);
 
-//        UserOauthInfoDto userOauthInfoDto = oAuthService.checkRegistedUser(userInfo);
-//        return ResponseEntity.ok(userOauthInfoDto);
-        return ResponseEntity.ok(userInfo);
+        UserOauthInfoDto userOauthInfoDto = oAuthService.checkRegistedUser(userInfo);
+        return ResponseEntity.ok(userOauthInfoDto);
     }
 
 

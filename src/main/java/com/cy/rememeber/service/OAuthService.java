@@ -1,5 +1,6 @@
 package com.cy.rememeber.service;
 
+import com.cy.rememeber.Entity.Store;
 import com.cy.rememeber.dto.UserOauthInfoDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -18,45 +19,65 @@ import org.springframework.web.client.RestTemplate;
 public class OAuthService {
 
 //    @Value"${spring.security.oauth2.client.registration.kakao.client-secret}")
-    private String secreKey;
+    private String secretKey;
+
+    @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
+    private String redirectUri;
+
+    @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
+    private String clientId;
 
     @Autowired
     private StoreService storeService;
 
+
+
+    /**
+     * @Description 카카오 서버로 부터 Access 토큰값 받아오기
+     * */
     public String getKakaoAccessToken(String code) throws JsonProcessingException {
+
+        String kakaoAuthUrl = "https://kauth.kakao.com/oauth/token";
+
         RestTemplate rt = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/x-www-form-urlencoded");
+        headers.add("Content-Type", "application/x-www-form-urlencoded"); //body데이터 설명해주는 헤더
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
+        params.add("client_id", clientId);
+        params.add("redirect_uri", redirectUri);
         params.add("code", code);
-//        params.add("client_secret", secretKey);
+        params.add("client_secret", secretKey);
 
-        HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);
+        HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params,
+                headers);
 
         ResponseEntity<String> response = rt.exchange(
-                "https://kauth.kakao.com/oauth/token",
+                "https://kauth.kakao.com/oauth/token", // https://{요청할 서버 주소}
                 HttpMethod.POST,
                 kakaoTokenRequest,
                 String.class
         );
-
+        String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(response.getBody());
-        return jsonNode.get("access_token").asText();
+        JsonNode jsonNode = objectMapper.readTree(responseBody);
+        String accessToken = jsonNode
+                .get("access_token").asText();
+        return accessToken;
     }
 
-
+    /**
+     * @Description  token으로 카카오에서 유저데이터 가져오기
+     * */
     public UserOauthInfoDto getUserInfo(String accessToken) throws JsonProcessingException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-
+        // HTTP 요청 보내기
         HttpEntity<MultiValueMap<String, String>> kakaoUserInfoRequest = new HttpEntity<>(headers);
         RestTemplate rt = new RestTemplate();
-
         ResponseEntity<String> response = rt.exchange(
                 "https://kapi.kakao.com/v2/user/me",
                 HttpMethod.POST,
@@ -64,38 +85,43 @@ public class OAuthService {
                 String.class
         );
 
+        String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(response.getBody());
-        String nickname = jsonNode.get("properties").get("nickname").asText();
-        String socialId = jsonNode.get("id").asText();
-
+        JsonNode jsonNode = objectMapper.readTree(responseBody);
+        System.out.println(jsonNode);
+        String nickname = jsonNode.get("properties")
+                .get("nickname").asText();
+        String social_id = jsonNode.get("id").asText();
         UserOauthInfoDto userOauthInfoDto = new UserOauthInfoDto();
-        userOauthInfoDto.setSocial_id(socialId);
+        userOauthInfoDto.setSocial_id(social_id);
         return userOauthInfoDto;
     }
 
     /**
-     * ���� ȸ������ üũ�ϴ� �޼���
-     * - JWT �߱� ���� ȸ�� ���θ� Ȯ��
+     * @Description 기존회원여부 체크
+     * @param userInfo 카카오에서 받아온 유저정보
+     * @return UserOauthInfoDto
      */
-//    public UserOauthInfoDto checkRegistedUser(UserOauthInfoDto userInfo) {
-//        String socialId = userInfo.getSocial_id();
-//        UserEntity user = userService.getUser(socialId);
-//
-//        UserOauthInfoDto result = new UserOauthInfoDto();
-//        result.setSocial_id(socialId);
-//
-//        if (user != null) {
-//            // ���� ȸ��
-//            log.info("���� ȸ�� �α��� : {}", socialId);
-//            result.setNickName(user.getNickname());
-//            result.setUser(true);
-//        } else {
-//            // �ű� ȸ��: ȸ������ ó��(�ʿ� �� ��Ʈ�ѷ����� �߰�)
-//            result.setNickName(userInfo.getNickName());
-//            result.setUser(false);
-//        }
-
-//        return result;
-//    }
+//    public UserOauthInfoDto checkRegistedUser(UserOauthInfoDto userInfo, HttpServletResponse response) throws JsonProcessingException {
+    public UserOauthInfoDto checkRegistedUser(UserOauthInfoDto userInfo) throws JsonProcessingException {
+        //회원 유무 확인
+        String social_id = userInfo.getSocial_id(); //카카오에서 받아온 유저 정보 중 아이디
+        UserOauthInfoDto userOauthInfoDto = new UserOauthInfoDto();
+        userOauthInfoDto.setSocial_id(social_id);
+        Store store = storeService.getStore(social_id);
+        if (store != null) { //이미 등록된 회원
+            log.info("기존 회원 로그인 : {}", social_id);
+            userOauthInfoDto.setPhoneNumber(store.getPhoneNumber());
+            userOauthInfoDto.setUser(true);
+//            String ownJwtAccessToken = jwtService.createAccessToken(user.getNickname());
+//            String ownJwtRefreshToken = jwtService.createRefreshToken();
+//            userOauthInfoDto.setOwnJwtAccessToken(ownJwtAccessToken);
+//            userOauthInfoDto.setOwnJwtRefreshToken(ownJwtRefreshToken);
+//            jwtService.sendAccessAndRefreshToken(response, ownJwtAccessToken, ownJwtRefreshToken);
+            return userOauthInfoDto;
+        }
+//        String ownJwtAccessToken = jwtService.createOauthToken(social_id);
+//        userOauthInfoDto.setOwnJwtAccessToken(ownJwtAccessToken);
+        return userOauthInfoDto;
+    }
 }
