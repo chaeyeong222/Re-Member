@@ -48,6 +48,12 @@ src/main/resources/application-core.properties
 # Reports, Logs
 build/reports/
 
+
+
 # Gradle
 .gradle/
 build/
+/out/
+/build/
+/target/
+/*.class
