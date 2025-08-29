@@ -3,6 +3,8 @@ package com.cy.rememeber.controller;
 import com.cy.rememeber.dto.response.FindCustomerDto;
 import com.cy.rememeber.service.CustomerService;
 import java.util.List;
+
+import com.cy.rememeber.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,13 +28,19 @@ public class CustomerController {
 
     @GetMapping("/findByPhone")
     public ResponseEntity<?> findByPhone(@RequestParam("customerPhone") String customerPhone) throws Exception{
-        List<FindCustomerDto> customer = customerService.getPhone(customerPhone);
-        return new ResponseEntity<>(customer, HttpStatus.OK);
+        List<FindCustomerDto> customerList = customerService.getPhone(customerPhone);
+        return new ResponseEntity<>(customerList, HttpStatus.OK);
     }
 
     @GetMapping("/findByName")
     public ResponseEntity<?> findByName(@RequestParam("customerName") String customerName) throws Exception{
         List<FindCustomerDto> customerList = customerService.getCustomer(customerName);
+        return new ResponseEntity<>(customerList, HttpStatus.OK);
+    }
+
+    @GetMapping("/getCustomers")
+    public ResponseEntity<?> getCustomersList(@RequestParam("storeKey") Long storeKey) throws Exception{
+        List<FindCustomerDto> customerList =  customerService.getCustomerByStoreKey(storeKey);
         return new ResponseEntity<>(customerList, HttpStatus.OK);
     }
 

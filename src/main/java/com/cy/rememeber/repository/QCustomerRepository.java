@@ -10,5 +10,7 @@ public interface QCustomerRepository {
     List<FindCustomerDto> findCustomerByName(String customerName);
 
     List<FindCustomerDto> findAll();
+
+    List<FindCustomerDto> getCustomerByStoreKey(Long storeKey);
 }
 

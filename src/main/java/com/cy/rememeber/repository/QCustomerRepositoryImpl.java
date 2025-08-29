@@ -62,4 +62,22 @@ public class QCustomerRepositoryImpl implements QCustomerRepository{
             .fetch();
     }
 
+    @Override
+    public List<FindCustomerDto> getCustomerByStoreKey(Long storeKey) {
+        return queryFactory
+                .select(Projections.constructor(FindCustomerDto.class,
+                        customer.customerKey.as("customerKey"),
+                        customer.customerPhone.as("customerPhone"),
+                        customer.customerName.as("name"),
+                        customer.memo.as("memo"),
+                        customer.visitCnt.as("visitCnt")))
+                .from(customer)
+                .where(storekeySearch(storeKey))
+                .fetch();
+    }
+
+    private BooleanExpression storekeySearch(Long storeKey){
+        return storeKey==null? null: customer.storeKey.eq(storeKey);
+    }
+
 }
