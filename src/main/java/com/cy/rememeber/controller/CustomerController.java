@@ -1,6 +1,8 @@
 package com.cy.rememeber.controller;
 
+import com.cy.rememeber.dto.response.CustomerDetailDto;
 import com.cy.rememeber.dto.response.FindCustomerDto;
+import com.cy.rememeber.dto.response.CustomerDatilDto;
 import com.cy.rememeber.service.CustomerService;
 import java.util.List;
 
@@ -9,11 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 고객관리
@@ -40,8 +38,21 @@ public class CustomerController {
 
     @GetMapping("/getCustomers")
     public ResponseEntity<?> getCustomersList(@RequestParam("storeKey") Long storeKey) throws Exception{
-        List<FindCustomerDto> customerList =  customerService.getCustomerByStoreKey(storeKey);
+        List<FindCustomerDto> customerList = customerService.getCustomerByStoreKey(storeKey);
+
+        if (customerList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
         return new ResponseEntity<>(customerList, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/customerHistory")
+    public ResponseEntity<?> getCustomersHistory(@PathVariable("id") Long customerKey) throws Exception{
+        CustomerDetailDto customerDetail = customerService.getCustomerDetailById(customerKey);
+        if (customerDetail == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(customerDetail, HttpStatus.OK);
     }
 
 }

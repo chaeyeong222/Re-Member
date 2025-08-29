@@ -38,7 +38,10 @@ public class Customer {
     private Timestamp joinDate; //최초방문
 
     private Long storeKey;
+
     //TODO : tag 기능
+    private String tags; // 예: "VIP,정기고객,추천인"
+
 }
 
 

@@ -5,13 +5,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.sql.Timestamp;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 public class FindCustomerDto {
-    String customerName;
-    String customerPhone;
-    int visitCnt;
-    String memo;
+    private Long Id;
+    private String customerName;
+    private String customerPhone;
+    private int visitCnt;
+    private String memo;
+    private String lastVisit;
+    private String joinDate; // 최초방문
+
 }
