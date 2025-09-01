@@ -48,7 +48,7 @@ public class OAuthService {
         params.add("grant_type", "authorization_code");
         params.add("client_id", clientId);
         params.add("redirect_uri", redirectUri);
-        params.add("code", code);
+        params.add("code", code); //카카오 코드
         params.add("client_secret", secretKey);
 
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params,
@@ -89,7 +89,7 @@ public class OAuthService {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
         System.out.println(jsonNode);
-        String nickname = jsonNode.get("properties")
+        String nickname = jsonNode.get("properties") //카카오상 유저가 설정한 이름
                 .get("nickname").asText();
         String social_id = jsonNode.get("id").asText();
         UserOauthInfoDto userOauthInfoDto = new UserOauthInfoDto();
