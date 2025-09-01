@@ -25,14 +25,21 @@ public class Store {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long storeKey;
 
-//    private String id;
-    private String password;
-    private String email;
-    private String name;
-    private String phoneNumber;
-    @JsonIgnore
-    @OneToMany
-    private List<Customer> customerList;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_key", nullable = false)
+    private User user;//
+
+    @Column(nullable = false)
+    private String storeName;
+
+    private String address;
+    private String introduction; // 가게 소개
+
+//    private String password;
+//    private String email;
+//    @JsonIgnore
+//    @OneToMany
+//    private List<Customer> customerList;
 
     //비밀번호 암호화 메서드
 //    public void passwordEncode(PasswordEncoder passwordEncoder) {

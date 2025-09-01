@@ -1,6 +1,7 @@
 package com.cy.rememeber.service;
 
 import com.cy.rememeber.Entity.Store;
+import com.cy.rememeber.Entity.User;
 import com.cy.rememeber.dto.UserOauthInfoDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -18,7 +19,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class OAuthService {
 
-//    @Value"${spring.security.oauth2.client.registration.kakao.client-secret}")
+    @Value("${spring.security.oauth2.client.registration.kakao.client-secret}")
     private String secretKey;
 
     @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
@@ -29,6 +30,9 @@ public class OAuthService {
 
     @Autowired
     private StoreService storeService;
+
+    @Autowired
+    private UserService userService;
 
 
 
@@ -88,12 +92,15 @@ public class OAuthService {
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
-        System.out.println(jsonNode);
-        String nickname = jsonNode.get("properties") //카카오상 유저가 설정한 이름
-                .get("nickname").asText();
-        String social_id = jsonNode.get("id").asText();
+
+        // 카카오에서 받은 닉네임과 ID를 모두 DTO에 담는다
+        String socialId = jsonNode.get("id").asText();
+        String nickname = jsonNode.get("properties").get("nickname").asText();
+
         UserOauthInfoDto userOauthInfoDto = new UserOauthInfoDto();
-        userOauthInfoDto.setSocial_id(social_id);
+        userOauthInfoDto.setSocial_id(socialId);
+        userOauthInfoDto.setNickname(nickname);
+
         return userOauthInfoDto;
     }
 
@@ -102,23 +109,26 @@ public class OAuthService {
      * @param userInfo 카카오에서 받아온 유저정보
      * @return UserOauthInfoDto
      */
-//    public UserOauthInfoDto checkRegistedUser(UserOauthInfoDto userInfo, HttpServletResponse response) throws JsonProcessingException {
     public UserOauthInfoDto checkRegistedUser(UserOauthInfoDto userInfo) throws JsonProcessingException {
         //회원 유무 확인
         String social_id = userInfo.getSocial_id(); //카카오에서 받아온 유저 정보 중 아이디
         UserOauthInfoDto userOauthInfoDto = new UserOauthInfoDto();
         userOauthInfoDto.setSocial_id(social_id);
-        Store store = storeService.getStore(social_id);
-        if (store != null) { //이미 등록된 회원
+        User user = userService.getUser(social_id);
+        if (user != null) { //이미 등록된 회원
             log.info("기존 회원 로그인 : {}", social_id);
-            userOauthInfoDto.setPhoneNumber(store.getPhoneNumber());
+            userOauthInfoDto.setPhoneNumber(user.getPhone());
+            userOauthInfoDto.setName(user.getUserName());
             userOauthInfoDto.setUser(true);
 //            String ownJwtAccessToken = jwtService.createAccessToken(user.getNickname());
 //            String ownJwtRefreshToken = jwtService.createRefreshToken();
 //            userOauthInfoDto.setOwnJwtAccessToken(ownJwtAccessToken);
 //            userOauthInfoDto.setOwnJwtRefreshToken(ownJwtRefreshToken);
 //            jwtService.sendAccessAndRefreshToken(response, ownJwtAccessToken, ownJwtRefreshToken);
-            return userOauthInfoDto;
+        }else{
+            log.info("New user. Social ID:{}", social_id);
+            userOauthInfoDto.setSocial_id(user.getSocialId());
+            userOauthInfoDto.setUser(false); //신규회원
         }
 //        String ownJwtAccessToken = jwtService.createOauthToken(social_id);
 //        userOauthInfoDto.setOwnJwtAccessToken(ownJwtAccessToken);

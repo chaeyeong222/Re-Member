@@ -10,7 +10,9 @@ import lombok.Setter;
 @Setter
 public class UserOauthInfoDto {
     String social_id;// 카카오 유저 아이디
-    boolean isUser;
+    String nickname;
+    boolean isUser; //기존회원여부
+
     String phoneNumber;
     String name;
 }
