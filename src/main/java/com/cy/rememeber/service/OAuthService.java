@@ -1,6 +1,5 @@
 package com.cy.rememeber.service;
 
-import com.cy.rememeber.Entity.Store;
 import com.cy.rememeber.Entity.User;
 import com.cy.rememeber.dto.UserOauthInfoDto;
 import com.fasterxml.jackson.core.JsonProcessingException;

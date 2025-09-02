@@ -1,13 +1,8 @@
 package com.cy.rememeber.Entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-
-import java.util.List;
-
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-//import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
 @SuperBuilder

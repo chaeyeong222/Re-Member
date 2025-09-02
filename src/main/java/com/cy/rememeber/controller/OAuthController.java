@@ -3,7 +3,6 @@ package com.cy.rememeber.controller;
 import com.cy.rememeber.dto.UserOauthInfoDto;
 import com.cy.rememeber.service.OAuthService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -34,12 +33,12 @@ public class OAuthController {
 
         if (result.isUser()) {
             // 기존 회원: 로그인 성공 처리
-            log.info("Existing user found. Social ID: {}", result.getSocial_id());
+            log.info("Existing user found. Social ID: {}", result.getSocialId());
             // TODO: JWT 토큰 발급 로직 추가
             return ResponseEntity.ok(result); // 200 OK
         } else {
             // 신규 회원: 추가 정보 입력 유도
-            log.info("New user. Needs registration. Social ID: {}", result.getSocial_id());
+            log.info("New user. Needs registration. Social ID: {}", result.getSocialId());
             return new ResponseEntity<>(result, HttpStatus.ACCEPTED); // 202 Accepted
         }
     }
