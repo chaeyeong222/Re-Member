@@ -20,38 +20,27 @@ import org.thymeleaf.spring6.processor.SpringUErrorsTagProcessor;
 @CrossOrigin
 public class UserController {
     private final UserService userService;
-    private final StoreService storeService;
 
-    @PostMapping("")
-    public ResponseEntity<?> createUser(@RequestBody UserSignUpDto userSignUpDto, HttpServletRequest request) throws Exception {
-//        userSignUpDto.setToken(jwtService.extractAccessToken(request).orElse(null));
-        //db에 있는지 체크
-        User user = userService.getUser(userSignUpDto.getId());
-        if(user!=null){
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(user, HttpStatus.OK);
-    }
-
-    @PostMapping("/signup") // 회원가입을 위한 별도의 URL 사용
-    public ResponseEntity<?> createUser(@RequestBody UserSignUpDto userSignUpDto) {
+    @PostMapping("/signup/customer") // 회원가입을 위한 별도의 URL 사용
+    public ResponseEntity<?> registerCustomer(@RequestBody UserSignUpDto userSignUpDto) {
         try {
             // 회원가입 로직
-            Store newStore = storeService.registerNewUser(userSignUpDto);
-            log.info("New user registered successfully. Social ID: {}", newStore.getSocialId());
-
-            // TODO: 회원가입 성공 후 JWT 토큰 발급 및 반환
-            // String jwtToken = jwtService.createToken(newStore.getSocialId());
-            // return ResponseEntity.ok(Map.of("message", "Signup successful", "token", jwtToken));
-
-            return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
+            userService.registerNewUser(userSignUpDto);
+            log.info("New customer user registered successfully with social ID: {}", userSignUpDto.getSocialId());
+            return ResponseEntity.status(HttpStatus.CREATED).body("Customer user created successfully");
         } catch (Exception e) {
-            log.error("User registration failed.", e);
+            log.error("Customer registration failed.", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Registration failed: " + e.getMessage());
         }
     }
 
-
-
+    @GetMapping("/{socialId}")
+    public ResponseEntity<?> getUser(@PathVariable String socialId){
+        User user = userService.getUser(socialId);
+        if(user==null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
 
 }

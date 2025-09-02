@@ -23,19 +23,6 @@ public class OAuthController {
 
     private final OAuthService oAuthService;
 
-    @CrossOrigin
-    @GetMapping("")
-    public ResponseEntity<?> kakaoCallBack(@RequestParam String code, HttpServletRequest request)
-        throws JsonProcessingException {
-        log.info("kakao code:{}", code);
-        String accessToken = oAuthService.getKakaoAccessToken(code);
-        UserOauthInfoDto userInfo = oAuthService.getUserInfo(accessToken);
-
-        UserOauthInfoDto userOauthInfoDto = oAuthService.checkRegistedUser(userInfo);
-        return ResponseEntity.ok(userOauthInfoDto);
-    }
-
-    ////////////////////임시 추가
     @GetMapping("")
     public ResponseEntity<UserOauthInfoDto> kakaoCallBack(@RequestParam String code)
         throws JsonProcessingException {

@@ -8,8 +8,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class StoreSignDto {
-    private String name;
-    private String id;
+    private String storeName;
+    private String address;
     private String email;
-    private String password;
+    private String introduction;
+    private String socialId;
 }

@@ -8,8 +8,9 @@ import lombok.Setter;
 @Setter
 public class UserSignUpDto {
     private String email;
-//    private String phone;
+    private String phone;
+    private String socialId;
     private String id;
-    private String nickname;
+    private String name;
     private String token;
 }
