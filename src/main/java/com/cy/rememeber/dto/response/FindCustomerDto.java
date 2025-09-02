@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 public class FindCustomerDto {
-    private Long Id;
+    private Long customerKey;
     private String customerName;
     private String customerPhone;
     private int visitCnt;

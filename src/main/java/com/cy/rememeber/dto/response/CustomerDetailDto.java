@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 public class CustomerDetailDto {
-    private Long customerKey; // °í°´ ID (customerKey¿Í µ¿ÀÏ)
+    private Long customerKey; //
     private String customerName; // °í°´¸í
     private String customerPhone; // ÈÞ´ëÆù¹øÈ£
     private int visitCnt; // ¹æ¹®È½¼ö

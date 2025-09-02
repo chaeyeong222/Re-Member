@@ -1,12 +1,11 @@
 package com.cy.rememeber.controller;
 
-import com.cy.rememeber.dto.response.CustomerDetailDto;
+import com.cy.rememeber.Entity.VisitHistory;
 import com.cy.rememeber.dto.response.FindCustomerDto;
-import com.cy.rememeber.dto.response.CustomerDatilDto;
 import com.cy.rememeber.service.CustomerService;
 import java.util.List;
 
-import com.cy.rememeber.service.StoreService;
+import com.cy.rememeber.service.VisitHistoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/customer")
 public class CustomerController {
     private final CustomerService customerService;
+    private final VisitHistoryService visitHistoryService;
 
     @GetMapping("/findByPhone")
     public ResponseEntity<?> findByPhone(@RequestParam("customerPhone") String customerPhone) throws Exception{
@@ -38,7 +38,7 @@ public class CustomerController {
 
     @GetMapping("/getCustomers")
     public ResponseEntity<?> getCustomersList(@RequestParam("storeKey") Long storeKey) throws Exception{
-        List<FindCustomerDto> customerList = customerService.getCustomerByStoreKey(storeKey);
+        List<FindCustomerDto> customerList = customerService.getAllCustomers(storeKey);
 
         if (customerList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -48,11 +48,11 @@ public class CustomerController {
 
     @GetMapping("/{id}/customerHistory")
     public ResponseEntity<?> getCustomersHistory(@PathVariable("id") Long customerKey) throws Exception{
-        CustomerDetailDto customerDetail = customerService.getCustomerDetailById(customerKey);
-        if (customerDetail == null) {
+        List<VisitHistory> histories = visitHistoryService.getVisitHistoryByCustomerKey(customerKey);
+        if (histories == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(customerDetail, HttpStatus.OK);
+        return new ResponseEntity<>(histories, HttpStatus.OK);
     }
 
 }

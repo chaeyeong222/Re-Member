@@ -1,11 +1,6 @@
 package com.cy.rememeber.Entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +10,7 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.sql.Timestamp;
+import java.util.PriorityQueue;
 
 @Entity
 @SuperBuilder
@@ -29,18 +25,32 @@ public class Customer {
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long customerKey; //°í°´Å°
-    private String customerName; //°í°´¸í
-    private String customerPhone; //ÈŞ´ëÆù¹øÈ£
-    private int visitCnt; //¹æ¹®È½¼ö
-    private String memo; //¸Ş¸ğ
-    private Timestamp lastVisit; //ÃÖ±Ù¹æ¹®
-    private Timestamp joinDate; //ÃÖÃÊ¹æ¹®
+    private Long customerKey; //ê³ ê°í‚¤
 
-    private Long storeKey;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_key", nullable = false)
+    private User user; //ì‹¤ì œ ê³ ê° ì •ë³´
 
-    //TODO : tag ±â´É
-    private String tags; // ¿¹: "VIP,Á¤±â°í°´,ÃßÃµÀÎ"
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_key")
+    private Store store; //ì´ ê³ ê°ì´ ì†í•œ ê°€ê²Œ
+
+    private int visitCnt; //ë°©ë¬¸íšŸìˆ˜
+    private String memo; //ë©”ëª¨
+    private Timestamp lastVisit; //ìµœê·¼ë°©ë¬¸
+    private Timestamp joinDate; //ìµœì´ˆë°©ë¬¸
+
+
+    //TODO : tag ê¸°ëŠ¥
+    private String tags; // ì˜ˆ: "VIP,ì •ê¸°ê³ ê°,ì¶”ì²œì¸"
+    // í¸ì˜ ë©”ì„œë“œ
+    public void addVisitCnt() {
+        this.visitCnt++;
+    }
+
+    public void updateMemo(String memo) {
+        this.memo = memo;
+    }
 
 }
 
