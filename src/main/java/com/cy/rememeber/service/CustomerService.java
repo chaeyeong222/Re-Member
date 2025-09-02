@@ -34,7 +34,7 @@ public class CustomerService {
     }
 
     public List<FindCustomerDto> getAllCustomers(Long storeKey) {
-        return customerRepository.findAll(storeKey);
+        return customerRepository.findCustomersByStoreStoreKey(storeKey);
     }
 
 

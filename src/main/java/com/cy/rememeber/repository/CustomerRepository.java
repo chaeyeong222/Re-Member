@@ -16,5 +16,5 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     List<FindCustomerDto> findByStore_StoreKey(Long storeKey);
 
-    List<FindCustomerDto> findAll(Long storeKey);
+    List<FindCustomerDto> findCustomersByStoreStoreKey(Long storeKey);
 }

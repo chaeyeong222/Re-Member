@@ -30,7 +30,7 @@ public class StoreService {
                 .orElseThrow(()->new IllegalArgumentException("User not foudn with socialId : "+storeSignDto.getSocialId()));
 
         //해당 유저가 이미 가게를 가지고 있는지 확인
-        Optional<Store> existingStore = storeRepository.findBySocialId(storeSignDto.getSocialId());
+        Optional<Store> existingStore = storeRepository.findByUser_SocialId(storeSignDto.getSocialId());
         if(existingStore.isPresent()){
             throw new IllegalStateException("User already has a registered store.");
         }
