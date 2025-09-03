@@ -1,6 +1,5 @@
 package com.cy.rememeber;
 
-import lombok.Getter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Controller;
@@ -16,6 +15,6 @@ public class RememeberApplication {
 
 	@GetMapping("/")
 	public String index(){
-		return "index";
+		return "index2";
 	}
 }
