@@ -19,12 +19,12 @@ public class VisitHistory {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_key", nullable = false)
-    private Customer customer; // 방문 이력 대상 고객
+    private Customer customer; //
 
     @Column(nullable = false)
-    private Timestamp visitDate; // 방문 날짜
+    private Timestamp visitDate; //
 
-    private int amount; // 지불 금액
+    private int amount; //
 
-    private String memo; // 이 방문에 대한 간단한 메모
+    private String memo; //
 }
