@@ -2,6 +2,7 @@ package com.cy.rememeber.service;
 
 import com.cy.rememeber.Entity.User;
 import com.cy.rememeber.dto.UserOauthInfoDto;
+import com.cy.rememeber.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -26,11 +26,18 @@ public class User {
     private String email;
     private boolean isUser;
 
+    private String refreshToken;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
     public enum Role{
         CUSTOMER, OWNER
+    }
+
+    // 비밀번호 암호화 메소드
+    public void updateRefreshToken(String updateRefreshToken) {
+        this.refreshToken = updateRefreshToken;
     }
 }
 
