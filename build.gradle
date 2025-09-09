@@ -33,39 +33,15 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-//	implementation 'org.springframework.security:spring-security-crypto:5.7.1'
-
-	//querydsl 사용을 위한 depencendy 추가
-	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}:${queryDslClassifier}"
-	annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}:${queryDslClassifier}"
 
 	implementation 'jakarta.persistence:jakarta.persistence-api:3.1.0'
 	annotationProcessor 'jakarta.persistence:jakarta.persistence-api:3.1.0'
-
-//	implementation 'org.springframework.boot:spring-boot-starter-security'
-
-	//q class생성되지않아 수정1
-	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
-	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
 	//redis 사용을 위한 추가
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	testImplementation 'com.github.codemonstur:embedded-redis:1.0.0'
 	//타임리프 추가
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-}
-// (4) queryDSL 추가 : QueryDSL 빌드 옵션
-def querydslDir = "$buildDir/generated/querydsl"
-
-querydsl {
-	jpa = true
-	querydslSourcesDir = querydslDir
-}
-sourceSets {
-	main.java.srcDir querydslDir
-}
-compileQuerydsl {
-	options.annotationProcessorPath = configurations.querydsl
 }
 configurations {
 	compileOnly {

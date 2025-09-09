@@ -36,6 +36,7 @@ public class OAuthService {
      * @Description 카카오 서버로 부터 Access 토큰값 받아오기
      * */
     public String getKakaoAccessToken(String code) throws JsonProcessingException {
+        System.out.println("여기까진옴");
 
         RestTemplate rt = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -43,7 +44,7 @@ public class OAuthService {
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
-//        params.add("client_id", clientId);
+        params.add("client_id", clientId);
         params.add("redirect_uri", redirectUri);
         params.add("code", code); //카카오 코드
         params.add("client_secret", secretKey);
