@@ -21,7 +21,7 @@ public class User {
     private Long userKey;
 
     private String socialId;//카카오에서 받아온 고유 id
-    private String userName;
+    private String name;
     private String phone;
     private String email;
     private boolean isUser;
@@ -32,7 +32,12 @@ public class User {
     private Role role;
 
     public enum Role{
-        CUSTOMER, OWNER
+        GUEST, CUSTOMER, OWNER
+    }
+
+    // 유저 권한 승격 메소드
+    public void authorizeUser() {
+        this.role = Role.CUSTOMER;
     }
 
     // 비밀번호 암호화 메소드

@@ -26,7 +26,7 @@ public class UserService {
         }
         User newUser = User.builder()
                 .socialId(userSignUpDto.getSocialId())
-                .userName(userSignUpDto.getName())
+                .name(userSignUpDto.getName())
                 .phone(userSignUpDto.getPhone())
                 .role(User.Role.CUSTOMER)
                 .build();

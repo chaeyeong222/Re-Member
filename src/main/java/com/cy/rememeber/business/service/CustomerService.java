@@ -21,7 +21,7 @@ public class CustomerService {
      * 고객 조회 - 이름
      * */
     public List<FindCustomerDto> getCustomer(String customerName){
-        return customerRepository.findByUser_UserNameContaining(customerName);
+        return customerRepository.findByUser_NameContaining(customerName);
     }
 
     /**

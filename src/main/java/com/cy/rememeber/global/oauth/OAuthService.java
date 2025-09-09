@@ -3,9 +3,11 @@ package com.cy.rememeber.global.oauth;
 import com.cy.rememeber.business.Entity.User;
 import com.cy.rememeber.business.dto.UserOauthInfoDto;
 import com.cy.rememeber.business.service.UserService;
+import com.cy.rememeber.global.jwt.JwtService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +35,13 @@ public class OAuthService {
     @Autowired
     private final UserService userService;
 
+    @Autowired
+    private JwtService jwtService;
+
     /**
      * @Description 카카오 서버로 부터 Access 토큰값 받아오기
      * */
     public String getKakaoAccessToken(String code) throws JsonProcessingException {
-        System.out.println("여기까진옴");
 
         RestTemplate rt = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -87,11 +91,13 @@ public class OAuthService {
 
         // 카카오에서 받은 닉네임과 ID를 모두 DTO에 담는다
         String socialId = jsonNode.get("id").asText();
-        String nickname = jsonNode.get("properties").get("nickname").asText();
+//        String nickname = jsonNode.get("properties").get("nickname").asText();
+        String phone = jsonNode.get("properties").get("phone").asText();
 
         UserOauthInfoDto userOauthInfoDto = new UserOauthInfoDto();
         userOauthInfoDto.setSocialId(socialId);
-        userOauthInfoDto.setNickname(nickname);
+//        userOauthInfoDto.setNickname(nickname);
+        userOauthInfoDto.setPhoneNumber(phone);
 
         return userOauthInfoDto;
     }
@@ -101,23 +107,31 @@ public class OAuthService {
      * @param userInfo 카카오에서 받아온 유저정보
      * @return UserOauthInfoDto
      */
-    public UserOauthInfoDto checkRegistedUser(UserOauthInfoDto userInfo){
+    public UserOauthInfoDto checkRegistedUser(UserOauthInfoDto userInfo,  HttpServletResponse response){
         String socialId = userInfo.getSocialId();
         UserOauthInfoDto userOauthInfoDto = new UserOauthInfoDto();
         userOauthInfoDto.setSocialId(socialId);
-
         // 소셜 ID로 사용자 검색
         User user = userService.getUser(socialId);
         if (user != null) { //이미 등록된 회원
             log.info("기존 회원 로그인 : {}", socialId);
             userOauthInfoDto.setPhoneNumber(user.getPhone());
-            userOauthInfoDto.setName(user.getUserName());
+            userOauthInfoDto.setName(user.getName());
             userOauthInfoDto.setUser(true);
-        }else{
-            log.info("New user. Social ID:{}", socialId);
-            userOauthInfoDto.setSocialId(user.getSocialId());
-            userOauthInfoDto.setUser(false); //신규회원
+
+            String ownJwtAccessToken = jwtService.createAccessToken(user.getPhone());
+            String ownJwtRefreshToken = jwtService.createRefreshToken();
+            userOauthInfoDto.setOwnJwtAccessToken(ownJwtAccessToken);
+            userOauthInfoDto.setOwnJwtRefreshToken(ownJwtRefreshToken);
+
+            jwtService.sendAccessAndRefreshToken(response, ownJwtAccessToken, ownJwtRefreshToken);
+            return userOauthInfoDto;
         }
+        log.info("New user. Social ID:{}", socialId);
+        String ownJwtAccessToken = jwtService.createAccessToken(socialId);
+        userOauthInfoDto.setOwnJwtAccessToken(ownJwtAccessToken);
+        userOauthInfoDto.setSocialId(user.getSocialId());
+        userOauthInfoDto.setUser(false); //신규회원
 
         return userOauthInfoDto;
     }

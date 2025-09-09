@@ -15,4 +15,7 @@ public class UserOauthInfoDto {
     private String phoneNumber;
     private String name;
 
+    String ownJwtAccessToken;
+    String ownJwtRefreshToken;
+
 }

@@ -19,7 +19,6 @@ import lombok.AllArgsConstructor;
 public class OAuthController {
 
     private final OAuthService oAuthService;
-
     /**
      * 카카오 callback [GET] /oauth/kakao/callback
      */
