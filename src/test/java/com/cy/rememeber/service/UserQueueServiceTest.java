@@ -1,8 +1,7 @@
 package com.cy.rememeber.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.cy.rememeber.EmbeddedRedis;
+import com.cy.rememeber.business.service.UserQueueService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,8 +1,8 @@
 package com.cy.rememeber.global.controller;
 
-import com.cy.rememeber.dto.UserOauthInfoDto;
+import com.cy.rememeber.business.dto.UserOauthInfoDto;
 
-import com.cy.rememeber.service.OAuthService;
+import com.cy.rememeber.global.oauth.OAuthService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;

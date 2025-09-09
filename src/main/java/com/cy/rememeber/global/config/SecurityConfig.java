@@ -7,10 +7,10 @@ import com.cy.rememeber.global.login.CustomJsonUsernamePasswordAuthenticationFil
 import com.cy.rememeber.global.login.LoginFailureHandler;
 import com.cy.rememeber.global.login.LoginService;
 import com.cy.rememeber.global.login.LoginSuccessHandler;
-import com.cy.rememeber.handler.OAuth2LoginFailureHandler;
-import com.cy.rememeber.handler.OAuth2LoginSuccessHandler;
-import com.cy.rememeber.repository.UserRepository;
-import com.cy.rememeber.service.CustomOAuth2UserService;
+import com.cy.rememeber.global.handler.OAuth2LoginFailureHandler;
+import com.cy.rememeber.global.handler.OAuth2LoginSuccessHandler;
+import com.cy.rememeber.business.repository.UserRepository;
+import com.cy.rememeber.business.service.CustomOAuth2UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

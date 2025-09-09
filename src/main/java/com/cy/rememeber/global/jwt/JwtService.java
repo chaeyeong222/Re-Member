@@ -3,7 +3,7 @@ package com.cy.rememeber.global.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.cy.rememeber.repository.UserRepository;
+import com.cy.rememeber.business.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;

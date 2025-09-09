@@ -1,7 +1,7 @@
 package com.cy.rememeber.global;
 
-import com.cy.rememeber.Entity.User;
-import com.cy.rememeber.Entity.User.Role;
+import com.cy.rememeber.business.Entity.User;
+import com.cy.rememeber.business.Entity.User.Role;
 import com.cy.rememeber.global.oauth.OAuth2UserInfo;
 import lombok.Builder;
 import lombok.Getter;

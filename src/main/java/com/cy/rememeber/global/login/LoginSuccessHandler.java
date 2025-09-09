@@ -1,7 +1,7 @@
 package com.cy.rememeber.global.login;
 
 import com.cy.rememeber.global.jwt.JwtService;
-import com.cy.rememeber.repository.UserRepository;
+import com.cy.rememeber.business.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

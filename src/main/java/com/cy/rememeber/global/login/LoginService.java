@@ -1,7 +1,7 @@
 package com.cy.rememeber.global.login;
 
-import com.cy.rememeber.Entity.User;
-import com.cy.rememeber.repository.UserRepository;
+import com.cy.rememeber.business.Entity.User;
+import com.cy.rememeber.business.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

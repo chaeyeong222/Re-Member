@@ -1,7 +1,7 @@
 package com.cy.rememeber.global.jwt;
 
-import com.cy.rememeber.Entity.User;
-import com.cy.rememeber.repository.UserRepository;
+import com.cy.rememeber.business.Entity.User;
+import com.cy.rememeber.business.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
