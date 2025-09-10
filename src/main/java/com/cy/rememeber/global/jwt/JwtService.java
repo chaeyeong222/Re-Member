@@ -37,12 +37,12 @@ public class JwtService {
     private String refreshHeader;
 
     /**
-     * JWT의 Subject와 Claim으로 email 사용 -> 클레임의 name을 "email"으로 설정
+     * JWT의 Subject와 Claim으로 phone 사용 -> 클레임의 name을 "phone"으로 설정
      * JWT의 헤더에 들어오는 값 : 'Authorization(Key) = Bearer {토큰} (Value)' 형식
      */
     private static final String ACCESS_TOKEN_SUBJECT = "AccessToken";
     private static final String REFRESH_TOKEN_SUBJECT = "RefreshToken";
-    private static final String EMAIL_CLAIM = "email";
+    private static final String PHONE_CLAIM = "phone";
     private static final String BEARER = "Bearer ";
 
     private final UserRepository userRepository;
@@ -74,7 +74,7 @@ public class JwtService {
             // 클레임으로는 저희는 email 하나만 사용
             // 추가적으로 식별자나, 이름 등의 정보를 더 추가 가능
             // 추가할 경우 .withClaim(클래임 이름, 클래임 값) 으로 설정
-            .withClaim(EMAIL_CLAIM, id)
+            .withClaim(PHONE_CLAIM, id)
             .sign(Algorithm.HMAC512(secretKey)); // HMAC512 알고리즘 사용
     }
 
@@ -139,13 +139,13 @@ public class JwtService {
      * 유효하다면 getClaim()으로 이메일 추출
      * 유효하지 않다면 빈 Optional 객체 반환
      */
-    public Optional<String> extractEmail(String accessToken) {
+    public Optional<String> extractPhone(String accessToken) {
         try {
             // 토큰 유효성 검사하는 데에 사용할 알고리즘이 있는 JWT verifier builder 반환
             return Optional.ofNullable(JWT.require(Algorithm.HMAC512(secretKey))
                 .build() // 반환된 빌더로 JWT verifier 생성
                 .verify(accessToken) // accessToken을 검증하고 유효하지 않다면 예외 발생
-                .getClaim(EMAIL_CLAIM) // claim(socialId) 가져오기
+                .getClaim(PHONE_CLAIM) // claim(socialId) 가져오기
                 .asString());
         } catch (Exception e) {
             log.error("액세스 토큰이 유효하지 않습니다.");

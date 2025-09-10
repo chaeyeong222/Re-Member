@@ -14,7 +14,7 @@ import lombok.AllArgsConstructor;
 @Slf4j
 @RestController
 @AllArgsConstructor
-@RequestMapping("/oauth")
+@RequestMapping("/api/auth/kakao")
 @CrossOrigin
 public class OAuthController {
 
@@ -23,9 +23,10 @@ public class OAuthController {
      * 카카오 callback [GET] /oauth/kakao/callback
      */
     @CrossOrigin
-    @GetMapping("")
+    @PostMapping("/login")
     public ResponseEntity<?> kakaoCallback(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
         log.info("kakao code : {} ", code);
+        System.out.println("들어오나");
         String accessToken = oAuthService.getKakaoAccessToken(code);
         UserOauthInfoDto userInfo = oAuthService.getUserInfo(accessToken);
 

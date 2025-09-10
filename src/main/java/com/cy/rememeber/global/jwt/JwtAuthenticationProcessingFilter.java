@@ -123,8 +123,8 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
         jwtService.extractAccessToken(request)
             .filter(jwtService::isTokenValid)
-            .ifPresent(accessToken -> jwtService.extractEmail(accessToken)
-                .ifPresent(email -> saveAuthentication(userRepository.findBySocialId(email).get())));
+            .ifPresent(accessToken -> jwtService.extractPhone(accessToken)
+                .ifPresent(phone -> saveAuthentication(userRepository.findByPhone(phone).get())));
 //                .ifPresent(this::saveAuthentication)));
         if (jwtService.extractAccessToken(request).isPresent()) {
             if (!jwtService.isTokenValid(jwtService.extractAccessToken(request).get())) {
