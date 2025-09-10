@@ -24,6 +24,7 @@ public class User {
     private String userName;
     private String phone;
     private String email;
+    private String nickname; //카카오 닉네임 임시전달용
     private boolean isUser;
 
     @Enumerated(EnumType.STRING)
