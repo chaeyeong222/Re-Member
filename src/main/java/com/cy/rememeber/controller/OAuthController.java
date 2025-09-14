@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,13 +18,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/auth/kakao")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
 public class OAuthController {
 
     private final OAuthService oAuthService;
 
+    @GetMapping("/check")
+    public String check(){
+        System.out.println("dkdkdkdk");
+        return "OK";
+    }
     @PostMapping("/login")
     public ResponseEntity<?> kakaoLogin(@RequestBody KakaoLoginRequestDto requestDto) {
+        System.out.println("enter");
         try {
             String code = requestDto.getCode();
             log.info("Kakao login request received with code: {}", code);
@@ -35,6 +42,7 @@ public class OAuthController {
                 .body("{\"error\": \"Failed to process Kakao login.\"}");
         }
     }
+
 
 
 }

@@ -40,6 +40,7 @@ public class OAuthService {
     @Transactional
     public LoginResponseDto kakaoLogin(String code) throws JsonProcessingException {
         // 1. 인가 코드로 카카오 액세스 토큰 받기
+        System.out.println(code +" code");
         String accessToken = getKakaoAccessToken(code);
         // 2. 액세스 토큰으로 카카오 사용자 정보 받기
         UserOauthInfoDto userInfo = getUserInfo(accessToken);
