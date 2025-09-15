@@ -13,4 +13,5 @@ public class UserSignUpDto {
     private String id;
     private String name;
     private String token;
+    private String nickname;
 }
