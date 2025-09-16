@@ -1,7 +1,6 @@
 package com.cy.rememeber.repository;
 
 import com.cy.rememeber.Entity.Store;
-import com.cy.rememeber.dto.response.StoreInfoResponseDto;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +12,9 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
     Optional<Store> findByUser(User user);
 
-    List<StoreInfoResponseDto> findAllBy();
+    List<Store> findTop5ByOrderByIdAsc();
+
+    List<Store> findByStoreNameContaining(String keyword);
+
 
 }

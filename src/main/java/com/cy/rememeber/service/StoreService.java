@@ -63,8 +63,12 @@ public class StoreService {
         return storeRepository.findByUser(user).orElse(null);
     }
 
-    public List<StoreInfoResponseDto> getStoreList(){
-        return storeRepository.findAll();
+    public List<Store> getStoreList(){
+        return storeRepository.findTop5ByOrderByIdAsc();
+    }
+
+    public List<Store> findStoreByStoreName(String keyword){
+        return storeRepository.findByStoreNameContaining(keyword);
     }
 
 

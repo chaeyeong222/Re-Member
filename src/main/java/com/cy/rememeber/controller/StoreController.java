@@ -62,7 +62,13 @@ public class StoreController {
 
     @GetMapping("/getStoreList")
     public ResponseEntity<?> getStoreList(){
-        List<StoreInfoResponseDto> storeList = storeService.getStoreList();
+        List<Store> storeList = storeService.getStoreList();
+        return new ResponseEntity<>(storeList, HttpStatus.OK);
+    }
+
+    @GetMapping("/findStore")
+    public ResponseEntity<?> findStoreByStoreName(String keyword){
+        List<Store> storeList = storeService.findStoreByStoreName(keyword);
         return new ResponseEntity<>(storeList, HttpStatus.OK);
     }
 
