@@ -3,6 +3,7 @@ package com.cy.rememeber.Entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.DynamicInsert;
 
 @Entity
 @SuperBuilder
@@ -13,6 +14,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @ToString
 @Builder
+@DynamicInsert
 public class Store {
 
     @Id
@@ -27,6 +29,7 @@ public class Store {
     @Column(nullable = false)
     private String storeName;
 
+    private String phone;
     private String address;
     private String introduction; // 가게 소개
 

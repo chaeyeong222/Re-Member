@@ -3,8 +3,10 @@ package com.cy.rememeber.service;
 import com.cy.rememeber.Entity.Store;
 import com.cy.rememeber.Entity.User;
 import com.cy.rememeber.dto.StoreSignDto;
+import com.cy.rememeber.dto.response.StoreInfoResponseDto;
 import com.cy.rememeber.repository.StoreRepository;
 import com.cy.rememeber.repository.UserRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -60,6 +62,11 @@ public class StoreService {
         // User를 통해 Store를 조회합니다.
         return storeRepository.findByUser(user).orElse(null);
     }
+
+    public List<StoreInfoResponseDto> getStoreList(){
+        return storeRepository.findAll();
+    }
+
 
 
 
