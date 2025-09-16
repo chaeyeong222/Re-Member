@@ -12,7 +12,7 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
     Optional<Store> findByUser(User user);
 
-    List<Store> findTop5ByOrderByIdAsc();
+    List<Store> findTop5ByOrderByStoreKeyAsc();
 
     List<Store> findByStoreNameContaining(String keyword);
 

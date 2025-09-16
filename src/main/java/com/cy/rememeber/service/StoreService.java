@@ -64,7 +64,7 @@ public class StoreService {
     }
 
     public List<Store> getStoreList(){
-        return storeRepository.findTop5ByOrderByIdAsc();
+        return storeRepository.findTop5ByOrderByStoreKeyAsc();
     }
 
     public List<Store> findStoreByStoreName(String keyword){
