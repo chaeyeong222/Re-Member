@@ -17,10 +17,10 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserQueueService {
-    private final RedisTemplate<String, String> redisTemplate;
-    private final String USER_QUEUE_WAIT_KEY = "users:queue:%s:wait";
+    private final RedisTemplate<String, String> redisTemplate; //key:userId, value: unix timestamp 등록시점
+    private final String USER_QUEUE_WAIT_KEY = "users:queue:%s:wait"; //큐를 여러개 운용할 수 있도록 가변값
     private final String USER_QUEUE_WAIT_KEY_FOR_SCAN = "users:queue:*:wait";
-    private final String USER_QUEUE_PROCEED_KEY = "users:queue:%s:proceed";
+    private final String USER_QUEUE_PROCEED_KEY = "users:queue:%s:proceed"; //허용한 것들
 
     // 대기열 등록
     public Long registerWaitQueue(final String queue, final Long userId) {
@@ -60,7 +60,7 @@ public class UserQueueService {
             }
         }
 
-        return allowedCount;
+        return allowedCount; //허용된 개수 return
     }
 
     /**
