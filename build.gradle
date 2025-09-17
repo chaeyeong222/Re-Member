@@ -42,13 +42,38 @@ dependencies {
 	testImplementation 'com.github.codemonstur:embedded-redis:1.0.0'
 	//타임리프 추가
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+	//querydsl 사용을 위한 depencendy 추가
+//	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+//	implementation 'javax.annotation:jakarta.annotation-api:1.3.2'
+//	implementation 'javax.persistence:jakarta.persistence-api:2.2'
+//	annotationProcessor 'com.querydsl:querydsl-apt:5.0.0'
+//
+//	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+//	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties[queryDslVersion]}:jakarta"
+//	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+//	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
 }
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
-	querydsl.extendsFrom compileClasspath
-}
+	//queryDSL 추가 : QueryDSL 빌드 옵션
+//def querydslDir = "$projectDir/generated/querydsl"
+//
+//querydsl {
+//	jpa = true
+//	querydslSourcesDir = querydslDir
+//}
+//sourceSets {
+//	main.java.srcDir querydslDir
+//}
+//compileQuerydsl {
+//	options.annotationProcessorPath = configurations.querydsl
+//}
+//configurations {
+//	compileOnly {
+//		extendsFrom annotationProcessor
+//	}
+//	querydsl.extendsFrom compileClasspath
+//}
 tasks.named('test') {
 	useJUnitPlatform()
 }

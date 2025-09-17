@@ -17,12 +17,12 @@ public class UserService {
     private final UserRepository userRepository;
 
     /**
-     * »õ·Î¿î À¯Àú¸¦ µî·ÏÇÏ´Â ¸Ş¼­µå
-     * ±âº» ¿ªÇÒÀº CUSTOMER·Î ¼³Á¤
+     * ìƒˆë¡œìš´ ìœ ì €ë¥¼ ë“±ë¡í•˜ëŠ” ë©”ì„œë“œ
+     * ê¸°ë³¸ ì—­í• ì€ CUSTOMERë¡œ ì„¤ì •
      */
     public void registerNewUser(UserSignUpDto userSignUpDto){
         Optional<User> existingUser = userRepository.findBySocialId(userSignUpDto.getSocialId());
-        if(existingUser.isPresent()){ //ÀÌ¹Ì µî·ÏµÈ À¯ÀúÀÎÁö È®ÀÎ
+        if(existingUser.isPresent()){ //ì´ë¯¸ ë“±ë¡ëœ ìœ ì €ì¸ì§€ í™•ì¸
             throw new IllegalStateException("User with social ID " + userSignUpDto.getSocialId() + " already exists.");
         }
         User newUser = User.builder()
@@ -30,13 +30,14 @@ public class UserService {
                 .userName(userSignUpDto.getName())
                 .phone(userSignUpDto.getPhone())
                 .role(User.Role.CUSTOMER)
+                .nickname(userSignUpDto.getNickname())
                 .build();
         userRepository.save(newUser);
     }
 
     /**
-     * À¯ÀúÀÇ ¼Ò¼È ID·Î À¯Àú Á¤º¸¸¦ °¡Á®¿À´Â ¸Ş¼­µå
-     * @param socialId Ä«Ä«¿À ¼Ò¼È ID
+     * ìœ ì €ì˜ ì†Œì…œ IDë¡œ ìœ ì € ì •ë³´ë¥¼ ê°€ì ¸ì˜¤ëŠ” ë©”ì„œë“œ
+     * @param socialId ì¹´ì¹´ì˜¤ ì†Œì…œ ID
      * @return User
      */
     public User getUser(String socialId){
@@ -44,8 +45,8 @@ public class UserService {
     }
 
     /**
-     * À¯ÀúÀÇ ¿ªÇÒÀ» STORE_OWNER·Î ¾÷µ¥ÀÌÆ®ÇÏ´Â ¸Ş¼­µå
-     * @param socialId À¯Àú ¼Ò¼È ID
+     * ìœ ì €ì˜ ì—­í• ì„ STORE_OWNERë¡œ ì—…ë°ì´íŠ¸í•˜ëŠ” ë©”ì„œë“œ
+     * @param socialId ìœ ì € ì†Œì…œ ID
      */
     public void updateUserRole(String socialId){
         User user = userRepository.findBySocialId(socialId)

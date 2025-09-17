@@ -2,8 +2,11 @@ package com.cy.rememeber.controller;
 
 import com.cy.rememeber.Entity.Store;
 import com.cy.rememeber.dto.StoreSignDto;
+import com.cy.rememeber.dto.response.StoreInfoResponseDto;
 import com.cy.rememeber.service.StoreService;
 import com.cy.rememeber.service.UserService;
+import java.util.List;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -55,6 +59,18 @@ public class StoreController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(store, HttpStatus.OK);
+    }
+
+    @GetMapping("/getStoreList")
+    public ResponseEntity<?> getStoreList(){
+        List<Store> storeList = storeService.getStoreList();
+        return new ResponseEntity<>(storeList, HttpStatus.OK);
+    }
+
+    @GetMapping("/findStore")
+    public ResponseEntity<?> findStoreByStoreName(@RequestParam("storeName")String keyword){
+        List<Store> storeList = storeService.findStoreByStoreName(keyword);
+        return new ResponseEntity<>(storeList, HttpStatus.OK);
     }
 
 

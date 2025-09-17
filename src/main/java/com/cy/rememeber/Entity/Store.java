@@ -1,8 +1,10 @@
 package com.cy.rememeber.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.DynamicInsert;
 
 @Entity
 @SuperBuilder
@@ -13,6 +15,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @ToString
 @Builder
+@DynamicInsert
 public class Store {
 
     @Id
@@ -21,12 +24,14 @@ public class Store {
     private Long storeKey;
 
     @OneToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "user_key", nullable = false)
     private User user;//
 
     @Column(nullable = false)
     private String storeName;
 
+    private String phone;
     private String address;
     private String introduction; // 가게 소개
 
