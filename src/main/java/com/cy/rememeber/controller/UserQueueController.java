@@ -46,7 +46,7 @@ public class UserQueueController {
         @RequestParam(name = "queue", defaultValue = "default") String queue,
         @RequestParam(name = "count") Long count) {
         Long allowed = userQueueService.allowUser(queue, count);
-        return ResponseEntity.ok(new AllowUserResponse(count, allowed));
+        return ResponseEntity.ok(new AllowUserResponse(count, allowed)); //몇개요청되었고, 실제 몇명 허용됐는지
     }
 
     /**
