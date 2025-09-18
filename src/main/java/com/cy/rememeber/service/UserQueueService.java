@@ -8,9 +8,12 @@ import java.time.Instant;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.data.redis.core.ZSetOperations.TypedTuple;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -21,6 +24,7 @@ public class UserQueueService {
     private final String USER_QUEUE_WAIT_KEY = "users:queue:%s:wait"; //큐를 여러개 운용할 수 있도록 가변값
     private final String USER_QUEUE_WAIT_KEY_FOR_SCAN = "users:queue:*:wait";
     private final String USER_QUEUE_PROCEED_KEY = "users:queue:%s:proceed"; //허용한 것들
+    private final ReactiveRedisTemplate reactiveRedisTemplate;
 
     // 대기열 등록
     public Long registerWaitQueue(final String queue, final Long userId) {
@@ -99,6 +103,31 @@ public class UserQueueService {
             return hexString.toString();
         }catch (NoSuchAlgorithmException e){
             throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * @Description 일정주기로 사용자 허용해주는 스케쥴
+     * 5초후 첫번째 스케쥴링, 이후는 3초 주기로 진행
+     * */
+    @Scheduled(initialDelay = 5000, fixedDelay = 3000)
+    public void scheduleAllowUser() {
+        log.info("called scheduling.....");
+        var maxAllowUserCount = 3L;
+
+        Set<String> queueKeys = redisTemplate.keys(USER_QUEUE_WAIT_KEY_FOR_SCAN);
+
+        if (queueKeys != null && !queueKeys.isEmpty()) {
+            for (String key : queueKeys) {
+                String[] parts = key.split(":");
+                if (parts.length > 2) { //큐 이름 추출
+                    String queueName = parts[2];
+
+                    // allowUser 메서드를 호출하여 사용자 허용 로직을 수행
+                    Long allowedCount = allowUser(queueName, maxAllowUserCount);
+                    log.info("Queue '{}' cleared {} users.", queueName, allowedCount);
+                }
+            }
         }
     }
 
