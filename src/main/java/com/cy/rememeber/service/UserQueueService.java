@@ -1,6 +1,8 @@
 package com.cy.rememeber.service;
 
 import com.cy.rememeber.Exception.ErrorCode;
+
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -8,19 +10,20 @@ import java.time.Instant;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.data.redis.core.*;
 import org.springframework.data.redis.core.ZSetOperations.TypedTuple;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserQueueService {
+public class UserQueueService  {
     private final RedisTemplate<String, String> redisTemplate; //key:userId, value: unix timestamp 등록시점
     private final String USER_QUEUE_WAIT_KEY = "users:queue:%s:wait"; //큐를 여러개 운용할 수 있도록 가변값
     private final String USER_QUEUE_WAIT_KEY_FOR_SCAN = "users:queue:*:wait";
     private final String USER_QUEUE_PROCEED_KEY = "users:queue:%s:proceed"; //허용한 것들
+    private final ReactiveRedisTemplate reactiveRedisTemplate;
 
     // 대기열 등록
     public Long registerWaitQueue(final String queue, final Long userId) {
@@ -100,6 +103,60 @@ public class UserQueueService {
         }catch (NoSuchAlgorithmException e){
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * @Description 일정주기로 사용자 허용해주는 스케쥴
+     * 5초후 첫번째 스케쥴링, 이후는 3초 주기로 진행
+     * */
+//    @Scheduled(initialDelay = 5000, fixedDelay = 3000)
+//    public void scheduleAllowUser() {
+//        log.info("called scheduling.....");
+//        var maxAllowUserCount = 3L;
+//
+//        Set<String> queueKeys = redisTemplate.keys(USER_QUEUE_WAIT_KEY_FOR_SCAN);
+//
+//        if (queueKeys != null && !queueKeys.isEmpty()) {
+//            for (String key : queueKeys) {
+//                String[] parts = key.split(":");
+//                if (parts.length > 2) { //큐 이름 추출
+//                    String queueName = parts[2];
+//
+//                    // allowUser 메서드를 호출하여 사용자 허용 로직을 수행
+//                    Long allowedCount = allowUser(queueName, maxAllowUserCount);
+//                    log.info("Queue '{}' cleared {} users.", queueName, allowedCount);
+//                }
+//            }
+//        }
+//    }
+    @Scheduled(initialDelay = 5000, fixedDelay = 3000)
+    public void scheduleAllowUser(){
+        log.info("called scheduling.....");
+        var maxAllowUserCount = 3L;
+
+        // SCAN 명령어를 사용하기 위해 RedisTemplate을 통해 connection을 얻어옵니다.
+        redisTemplate.execute((RedisCallback<Void>) connection -> {
+            ScanOptions scanOptions = ScanOptions.scanOptions()
+                    .match(USER_QUEUE_WAIT_KEY_FOR_SCAN)
+                    .count(100) // 한 번에 처리할 키 개수
+                    .build();
+
+            Cursor<byte[]> cursor = connection.scan(scanOptions);
+
+            while (cursor.hasNext()) {
+                String key = new String(cursor.next(), StandardCharsets.UTF_8);
+                String[] parts = key.split(":");
+
+                if (parts.length > 2) {
+                    String queueName = parts[2];
+                    Long allowedCount = allowUser(queueName, maxAllowUserCount);
+                    log.info("Queue '{}' cleared {} users.", queueName, allowedCount);
+                }
+            }
+
+            cursor.close();
+            return null;
+        });
     }
 
 }
