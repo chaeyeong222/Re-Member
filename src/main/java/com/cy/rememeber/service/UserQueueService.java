@@ -10,21 +10,26 @@ import java.time.Instant;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.*;
 import org.springframework.data.redis.core.ZSetOperations.TypedTuple;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
+@EnableScheduling
 @RequiredArgsConstructor
-public class UserQueueService  {
+public class UserQueueService {
+
     private final RedisTemplate<String, String> redisTemplate; //key:userId, value: unix timestamp 등록시점
     private final String USER_QUEUE_WAIT_KEY = "users:queue:%s:wait"; //큐를 여러개 운용할 수 있도록 가변값
     private final String USER_QUEUE_WAIT_KEY_FOR_SCAN = "users:queue:*:wait";
     private final String USER_QUEUE_PROCEED_KEY = "users:queue:%s:proceed"; //허용한 것들
-    private final ReactiveRedisTemplate reactiveRedisTemplate;
 
+    @Value("${scheduler.enabled}")
+    private Boolean scheduling = false;
     // 대기열 등록
     public Long registerWaitQueue(final String queue, final Long userId) {
         var unixTimestamp = Instant.now().getEpochSecond();
@@ -44,7 +49,7 @@ public class UserQueueService  {
     /**
      * @Description 진입허용
      * @Param count: 몇 명의 사용자를 허용할 것인지
-     * */
+     */
     public Long allowUser(final String queue, final Long count) {
         ZSetOperations<String, String> zSetOps = redisTemplate.opsForZSet();
         String waitKey = USER_QUEUE_WAIT_KEY.formatted(queue);
@@ -69,7 +74,7 @@ public class UserQueueService  {
     /**
      * @Description 진입이 가능한 상태인지 확인
      * @Param
-     * */
+     */
     public boolean isAllowed(final String queue, final Long userId) {
         Long rank = redisTemplate.opsForZSet()
             .rank(USER_QUEUE_PROCEED_KEY.formatted(queue), userId.toString());
@@ -78,83 +83,63 @@ public class UserQueueService  {
 
     /**
      * @Description 순번조회
-     * */
+     */
     public Long getRank(final String queue, final Long userId) {
         Long rank = redisTemplate.opsForZSet()
-                .rank(USER_QUEUE_WAIT_KEY.formatted(queue), userId.toString());
+            .rank(USER_QUEUE_WAIT_KEY.formatted(queue), userId.toString());
         return (rank != null && rank >= 0) ? rank + 1 : -1;
 //        return (rank != null && rank >= 0) ? rank + 1 : rank;
     }
 
     /**
      * @Description 토큰생성
-     * */
-    public String generateToken(final String queue, final Long userId){
-        try{
+     */
+    public String generateToken(final String queue, final Long userId) {
+        try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             var input = "user-queue-%s-%d".formatted(queue, userId);
             byte[] encodeHash = digest.digest(input.getBytes(StandardCharsets.UTF_8));
 
             StringBuilder hexString = new StringBuilder();
-            for(byte aByte : encodeHash){
+            for (byte aByte : encodeHash) {
                 hexString.append(String.format("%02x", aByte));
             }
             return hexString.toString();
-        }catch (NoSuchAlgorithmException e){
+        } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
     }
-
     /**
      * @Description 일정주기로 사용자 허용해주는 스케쥴
      * 5초후 첫번째 스케쥴링, 이후는 3초 주기로 진행
      * */
-//    @Scheduled(initialDelay = 5000, fixedDelay = 3000)
-//    public void scheduleAllowUser() {
-//        log.info("called scheduling.....");
-//        var maxAllowUserCount = 3L;
-//
-//        Set<String> queueKeys = redisTemplate.keys(USER_QUEUE_WAIT_KEY_FOR_SCAN);
-//
-//        if (queueKeys != null && !queueKeys.isEmpty()) {
-//            for (String key : queueKeys) {
-//                String[] parts = key.split(":");
-//                if (parts.length > 2) { //큐 이름 추출
-//                    String queueName = parts[2];
-//
-//                    // allowUser 메서드를 호출하여 사용자 허용 로직을 수행
-//                    Long allowedCount = allowUser(queueName, maxAllowUserCount);
-//                    log.info("Queue '{}' cleared {} users.", queueName, allowedCount);
-//                }
-//            }
-//        }
-//    }
-    @Scheduled(initialDelay = 5000, fixedDelay = 3000)
+    @Scheduled(initialDelay = 5000, fixedDelay = 10000)
     public void scheduleAllowUser(){
+        if(!scheduling) return;
+
         log.info("called scheduling.....");
         var maxAllowUserCount = 3L;
 
-        // SCAN 명령어를 사용하기 위해 RedisTemplate을 통해 connection을 얻어옵니다.
+        // SCAN 명령어를 사용하기 위해 RedisTemplate을 통해 RedisConnection에 접근
         redisTemplate.execute((RedisCallback<Void>) connection -> {
             ScanOptions scanOptions = ScanOptions.scanOptions()
                     .match(USER_QUEUE_WAIT_KEY_FOR_SCAN)
-                    .count(100) // 한 번에 처리할 키 개수
+                    .count(100) // 한 번에 가져올 키 개수
                     .build();
 
-            Cursor<byte[]> cursor = connection.scan(scanOptions);
+            //redis.scan() 호출
+            try (Cursor<byte[]> cursor = connection.scan(scanOptions)) {
+                while (cursor.hasNext()) {
+                    String key = new String(cursor.next(), StandardCharsets.UTF_8);
 
-            while (cursor.hasNext()) {
-                String key = new String(cursor.next(), StandardCharsets.UTF_8);
-                String[] parts = key.split(":");
-
-                if (parts.length > 2) {
-                    String queueName = parts[2];
-                    Long allowedCount = allowUser(queueName, maxAllowUserCount);
-                    log.info("Queue '{}' cleared {} users.", queueName, allowedCount);
+                    String[] parts = key.split(":");
+                    if (parts.length > 2) { //2번 인덱스가 큐 이름
+                        String queueName = parts[2];
+                        Long allowedCount = allowUser(queueName, maxAllowUserCount);
+                        log.info("Tried {} and allowed {} members of {} queue", maxAllowUserCount, allowedCount, queueName);
+                    }
                 }
             }
-
-            cursor.close();
             return null;
         });
     }
