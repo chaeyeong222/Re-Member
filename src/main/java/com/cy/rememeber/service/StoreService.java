@@ -51,20 +51,18 @@ public class StoreService {
      * @return Store
      */
     public Store getStoreBySocialId(String socialId) {
-        // socialId로 유저를 먼저 찾습니다.
+        System.out.println("가게잇나?");
+        System.out.println(socialId);
         User user = userRepository.findBySocialId(socialId)
-                .orElse(null);
+            .orElseThrow(() -> new IllegalArgumentException("해당 소셜 ID 유저 없음"));
 
-        if (user == null) {
-            return null;
-        }
-
-        // User를 통해 Store를 조회합니다.
-        return storeRepository.findByUser(user).orElse(null);
+        return storeRepository.findByUser(user)
+            .orElse(null);
     }
 
     public List<Store> getStoreList(){
         return storeRepository.findTop5ByOrderByStoreKeyAsc();
+//        return storeRepository.findAll();
     }
 
     public List<Store> findStoreByStoreName(String keyword){

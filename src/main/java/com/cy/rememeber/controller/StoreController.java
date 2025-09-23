@@ -52,7 +52,7 @@ public class StoreController {
     /**
      * 특정 가게정보를 가져오는 메서드
      * */
-    @GetMapping("/{storeid}")
+    @GetMapping("/getStore/{socialId}")
     public ResponseEntity<?> getStore(@PathVariable("socialId") String socialId){
         Store store = storeService.getStoreBySocialId(socialId);
         if(store==null){
@@ -63,6 +63,7 @@ public class StoreController {
 
     @GetMapping("/getStoreList")
     public ResponseEntity<?> getStoreList(){
+        log.info("storeMain 접근");
         List<Store> storeList = storeService.getStoreList();
         return new ResponseEntity<>(storeList, HttpStatus.OK);
     }
