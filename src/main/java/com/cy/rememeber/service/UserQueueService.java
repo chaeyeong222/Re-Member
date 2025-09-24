@@ -2,7 +2,6 @@ package com.cy.rememeber.service;
 
 import com.cy.rememeber.Exception.ErrorCode;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -30,6 +29,7 @@ public class UserQueueService {
 
     @Value("${scheduler.enabled}")
     private Boolean scheduling = false;
+
     // 대기열 등록
     public Long registerWaitQueue(final String queue, final Long userId) {
         var unixTimestamp = Instant.now().getEpochSecond();
@@ -79,6 +79,18 @@ public class UserQueueService {
         Long rank = redisTemplate.opsForZSet()
             .rank(USER_QUEUE_PROCEED_KEY.formatted(queue), userId.toString());
         return rank != null && rank >= 0; //rank>=0 이면 등록됐다고 간주
+    }
+
+    /**
+     * @Description 진입이 가능한 상태인지 확인 by 토큰
+     * @Param
+     */
+    public boolean isAllowedByToken(final String queue, final Long userId, final String token) {
+        String generatedToken = this.generateToken(queue, userId);
+        if (generatedToken.equalsIgnoreCase(token)) { //토큰비교
+            return true;
+        }
+        return false;
     }
 
     /**

@@ -1,6 +1,6 @@
 package com.cy.rememeber.controller;
 
-import com.cy.rememeber.dto.response.WaitingRoomResponse;
+import com.cy.rememeber.dto.response.UserStatusResponseDto;
 import com.cy.rememeber.service.UserQueueService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,22 +11,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@RestController("/enter")
 @RequiredArgsConstructor
-public class WaitingRoomController {
+public class EntranceController {
     private final UserQueueService userQueueService;
 
-    @GetMapping("/waiting-room")
-    public ResponseEntity<WaitingRoomResponse> waitingRoomPage(
+    @GetMapping("/checkStatus")
+    public ResponseEntity<UserStatusResponseDto> checkStatus(
         @RequestParam(name = "queue", defaultValue = "default") String queue,
         @RequestParam(name = "user_id") Long userId,
-        @RequestParam(name = "redirect_url") String redirectUrl,
-        HttpServletRequest request
-    ) {
+        HttpServletRequest request) {
+
         var cookies = request.getCookies();
         var cookieName = "user-queue-%s-token".formatted(queue);
-        String token = "";
 
+        //쿠키 담겨있는 값들 중 큐이름에 해당하는 값을 가져옴
+        String token = "";
         if (cookies != null) {
             var cookie = Arrays.stream(cookies)
                 .filter(i -> i.getName().equalsIgnoreCase(cookieName))
@@ -34,34 +34,19 @@ public class WaitingRoomController {
             token = cookie.orElse(new Cookie(cookieName, "")).getValue();
         }
 
-        // 토큰 유효성 검사
+        //토큰 검사
         boolean isAllowed = userQueueService.isAllowedByToken(queue, userId, token);
 
         if (isAllowed) {
-            // 토큰이 유효하여 바로 진입 가능한 경우
             return ResponseEntity.ok(
-                new WaitingRoomResponse(
-                    0L, userId, queue, true, redirectUrl
-                )
+                new UserStatusResponseDto(true, "/reservations") //예약페이지로 이동
+            );
+        } else {
+            String redirectUrl = "http://localhost:8090/waiting-room?user_id=%d&redirect_url=%s".formatted(
+                userId, "localhost:8090/reservations"); //입장가능해지면 이동할 페이지 s 에 들어감
+            return ResponseEntity.ok(
+                new UserStatusResponseDto(false, redirectUrl)
             );
         }
-
-        // 토큰이 유효하지 않아 대기열에 등록하는 경우
-        Long rank;
-        try {
-            rank = userQueueService.registerWaitQueue(queue, userId);
-        } catch (Exception ex) {
-            // 예외 발생 시, 이미 대기열에 있다고 가정하고 순위만 가져옵니다.
-            rank = userQueueService.getRank(queue, userId);
-        }
-
-        // 대기 순위 정보를 담아 JSON 응답 반환
-        return ResponseEntity.ok(
-            new WaitingRoomResponse(
-                rank, userId, queue, false, null
-            )
-        );
     }
-
-
 }
