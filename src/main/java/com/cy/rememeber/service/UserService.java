@@ -20,7 +20,7 @@ public class UserService {
      * 새로운 유저를 등록하는 메서드
      * 기본 역할은 CUSTOMER로 설정
      */
-    public void registerNewUser(UserSignUpDto userSignUpDto){
+    public User registerNewUser(UserSignUpDto userSignUpDto){
         Optional<User> existingUser = userRepository.findBySocialId(userSignUpDto.getSocialId());
         if(existingUser.isPresent()){ //이미 등록된 유저인지 확인
             throw new IllegalStateException("User with social ID " + userSignUpDto.getSocialId() + " already exists.");
@@ -32,7 +32,7 @@ public class UserService {
                 .role(User.Role.CUSTOMER)
                 .nickname(userSignUpDto.getNickname())
                 .build();
-        userRepository.save(newUser);
+        return userRepository.save(newUser);
     }
 
     /**
@@ -50,7 +50,7 @@ public class UserService {
      */
     public void updateUserRole(String socialId){
         User user = userRepository.findBySocialId(socialId)
-                .orElseThrow(()->new IllegalStateException("User not foudn with social ID: " + socialId));
+                .orElseThrow(()->new IllegalStateException("User not found with social ID: " + socialId));
         user.setRole(User.Role.OWNER);
         userRepository.save(user);
     }

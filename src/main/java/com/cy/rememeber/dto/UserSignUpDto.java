@@ -10,7 +10,7 @@ public class UserSignUpDto {
     private String email;
     private String phone;
     private String socialId;
-    private String id;
+    private Long userKey;
     private String name;
     private String token;
     private String nickname;

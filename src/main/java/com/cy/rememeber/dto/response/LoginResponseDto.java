@@ -14,4 +14,6 @@ public class LoginResponseDto {
     private boolean newUser;
     private String socialId;
     private String nickname;
+
+    private Long userKey;
 }
