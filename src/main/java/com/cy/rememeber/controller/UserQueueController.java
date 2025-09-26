@@ -64,7 +64,8 @@ public class UserQueueController {
      * @Description 대기번호 체크
      */
     @GetMapping("/rank")
-    public ResponseEntity<?> getRank(final String queue, final Long userId) {
+    public ResponseEntity<?> getRank(@RequestParam(name = "queue", defaultValue = "default")final String queue,
+                                     @RequestParam(name = "user_id") final Long userId) {
         Long rank = userQueueService.getRank(queue, userId);
         return ResponseEntity.ok(new RankNumberResponse(rank));
     }

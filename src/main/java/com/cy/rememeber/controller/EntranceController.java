@@ -55,6 +55,7 @@ public class EntranceController {
             return ResponseEntity.ok(
                     new UserStatusResponseDto(false, waitingRoomUrl)
             );
+
         }
     }
 }
