@@ -25,9 +25,9 @@ public class UserController {
     public ResponseEntity<?> registerCustomer(@RequestBody UserSignUpDto userSignUpDto) {
         try {
             // 회원가입 로직
-            userService.registerNewUser(userSignUpDto);
-            log.info("New customer user registered successfully with social ID: {}", userSignUpDto.getSocialId());
-            return ResponseEntity.status(HttpStatus.CREATED).body("Customer user created successfully");
+            User registeredUser = userService.registerNewUser(userSignUpDto);
+            log.info("New customer user registered successfully with social ID: {}, userKey: {}", userSignUpDto.getSocialId(), registeredUser.getUserKey());
+            return ResponseEntity.status(HttpStatus.CREATED).body(registeredUser.getUserKey());
         } catch (Exception e) {
             log.error("Customer registration failed.", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Registration failed: " + e.getMessage());

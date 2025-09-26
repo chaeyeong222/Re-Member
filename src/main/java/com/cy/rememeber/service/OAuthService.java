@@ -59,6 +59,7 @@ public class OAuthService {
                     .newUser(false)
                     .socialId(user.getSocialId())
                     .nickname(user.getNickname())
+                    .userKey(user.getUserKey())
                     .build();
             })
             .orElseGet(() -> {
