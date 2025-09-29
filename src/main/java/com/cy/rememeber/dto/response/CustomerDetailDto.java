@@ -14,21 +14,21 @@ import java.util.List;
 @Getter
 public class CustomerDetailDto {
     private Long customerKey; //
-    private String customerName; // °í°´¸í
-    private String customerPhone; // ÈŞ´ëÆù¹øÈ£
-    private int visitCnt; // ¹æ¹®È½¼ö
-    private String memo; // ¸Ş¸ğ
-    private String lastVisit; // ÃÖ±Ù¹æ¹®
+    private String customerName; // ê³ ê°ëª…
+    private String customerPhone; // íœ´ëŒ€í°ë²ˆí˜¸
+    private int visitCnt; // ë°©ë¬¸íšŸìˆ˜
+    private String memo; // ë©”ëª¨
+    private String lastVisit; // ìµœê·¼ë°©ë¬¸
 
-    private String joinDate; // ÃÖÃÊ¹æ¹®
-    private int totalSpent; // ÃÑ ÁöÃâ¾×
-    private String favoriteService; // ¼±È£ ¼­ºñ½º
-    private List<VisitHistoryDto> visitHistory; // ¹æ¹® ÀÌ·Â
-    private List<String> preferences; // ¼±È£ »çÇ×
-    private List<DetailedMemoDto> detailedMemos; // »ó¼¼ ¸Ş¸ğ
+    private String joinDate; // ìµœì´ˆë°©ë¬¸
+    private int totalSpent; // ì´ ì§€ì¶œì•¡
+    private String favoriteService; // ì„ í˜¸ ì„œë¹„ìŠ¤
+    private List<VisitHistoryDto> visitHistory; // ë°©ë¬¸ ì´ë ¥
+    private List<String> preferences; // ì„ í˜¸ ì‚¬í•­
+    private List<DetailedMemoDto> detailedMemos; // ìƒì„¸ ë©”ëª¨
 
-    //TODO: ÅÂ±×±â´É
-    private List<String> tags; // ÅÂ±× ¸ñ·Ï
+    //TODO: íƒœê·¸ê¸°ëŠ¥
+    private List<String> tags; // íƒœê·¸ ëª©ë¡
 }
 
 @AllArgsConstructor
