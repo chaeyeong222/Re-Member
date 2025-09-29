@@ -18,6 +18,6 @@ public class FindCustomerDto {
     private int visitCnt;
     private String memo;
     private String lastVisit;
-    private String joinDate; // ���ʹ湮
+    private String joinDate; // 최초방문
 
 }
