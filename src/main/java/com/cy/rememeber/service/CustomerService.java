@@ -1,6 +1,7 @@
 package com.cy.rememeber.service;
 
 import com.cy.rememeber.Entity.Customer;
+import com.cy.rememeber.dto.request.AddCustomerRequestDto;
 import com.cy.rememeber.dto.response.CustomerDetailDto;
 import com.cy.rememeber.dto.response.FindCustomerDto;
 import com.cy.rememeber.repository.CustomerRepository;
@@ -42,5 +43,16 @@ public class CustomerService {
                 .map(FindCustomerDto::from) // 정적 팩토리 메소드 참조
                 .collect(Collectors.toList());
     }
+
+//    public Customer addCustomer(AddCustomerRequestDto dto) {
+//        Customer customer = Customer.builder()
+//            .name(dto.getName())
+//            .phone(dto.getPhone())
+//            .storeKey(dto.getStoreKey())
+//            .memo(dto.getMemo())
+//            .build();
+//
+//        return customerRepository.save(customer);
+//    }
 
 }

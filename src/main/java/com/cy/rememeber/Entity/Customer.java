@@ -14,7 +14,7 @@ import java.util.PriorityQueue;
 
 @Entity
 @SuperBuilder
-@Table(name = "Customer")
+@Table(name = "customer")
 @NoArgsConstructor
 @Getter
 @Setter
