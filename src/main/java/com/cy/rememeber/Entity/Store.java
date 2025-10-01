@@ -35,15 +35,4 @@ public class Store {
     private String address;
     private String introduction; // 가게 소개
 
-//    private String password;
-//    private String email;
-//    @JsonIgnore
-//    @OneToMany
-//    private List<Customer> customerList;
-
-    //비밀번호 암호화 메서드
-//    public void passwordEncode(PasswordEncoder passwordEncoder) {
-//        this.password = passwordEncoder.encode(this.password);
-//    }
-
 }

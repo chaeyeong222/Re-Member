@@ -17,5 +17,7 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
     List<Store> findByStoreNameContaining(String keyword);
 
+    Optional<Store> findByStoreKey(Long storeKey);
+
 
 }
