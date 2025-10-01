@@ -8,7 +8,7 @@ import org.hibernate.annotations.DynamicInsert;
 
 @Entity
 @SuperBuilder
-@Table(name = "Store")
+@Table(name = "store")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

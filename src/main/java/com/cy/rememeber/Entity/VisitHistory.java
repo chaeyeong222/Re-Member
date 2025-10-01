@@ -1,5 +1,6 @@
 package com.cy.rememeber.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,6 +20,7 @@ public class VisitHistory {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_key", nullable = false)
+    @JsonIgnore
     private Customer customer; //
 
     @Column(nullable = false)
