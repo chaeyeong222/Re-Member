@@ -5,6 +5,8 @@ import com.cy.rememeber.dto.response.CustomerDetailDto;
 import com.cy.rememeber.dto.response.FindCustomerDto;
 import com.cy.rememeber.repository.CustomerRepository;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,11 +36,11 @@ public class CustomerService {
     }
 
     public List<FindCustomerDto> getAllCustomers(Long storeKey) {
-        return customerRepository.findCustomersByStoreStoreKey(storeKey);
+        List<Customer> customers = customerRepository.findAllByStoreKeyWithUser(storeKey);
+
+        return customers.stream()
+                .map(FindCustomerDto::from) // 정적 팩토리 메소드 참조
+                .collect(Collectors.toList());
     }
-
-
-
-
 
 }
