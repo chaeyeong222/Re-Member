@@ -50,11 +50,23 @@ public class StoreController {
     }
 
     /**
-     * 특정 가게정보를 가져오는 메서드
+     * socialId로 특정 가게정보를 조회 : 내 가게 조회용도
      * */
     @GetMapping("/getStore/{socialId}")
     public ResponseEntity<?> getStore(@PathVariable("socialId") String socialId){
         Store store = storeService.getStoreBySocialId(socialId);
+        if(store==null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(store, HttpStatus.OK);
+    }
+
+    /**
+     * storeKey로 특정 가게정보를 조회 : 예약 시 사용하는 용도
+     * */
+    @GetMapping("/getStore/{socialId}")
+    public ResponseEntity<?> getStore(@PathVariable("storeKey") Long storeKey){
+        Store store = storeService.getStoreByStoreKey(storeKey);
         if(store==null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -73,7 +85,6 @@ public class StoreController {
         List<Store> storeList = storeService.findStoreByStoreName(keyword);
         return new ResponseEntity<>(storeList, HttpStatus.OK);
     }
-
 
 
 }

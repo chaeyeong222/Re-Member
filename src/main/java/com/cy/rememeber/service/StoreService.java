@@ -46,7 +46,7 @@ public class StoreService {
     }
 
     /**
-     * 유저의 소셜 ID로 가게 정보를 조회하는 메서드
+     * 유저의 소셜 ID로 가게 정보를 조회하는 메서드 : 소유한 가게 확인 용도
      * @param socialId 유저 소셜 ID
      * @return Store
      */
@@ -68,9 +68,16 @@ public class StoreService {
     public List<Store> findStoreByStoreName(String keyword){
         return storeRepository.findByStoreNameContaining(keyword);
     }
+    /**
+     * 유저의 소셜 ID로 가게 정보를 조회하는 메서드
+     * @param storeKey 유저 소셜 ID
+     * @return Store
+     */
+    public Store getStoreByStoreKey(Long storeKey) {
+        log.info("storeKey: {} 로 조회", storeKey);
+        Store store = storeRepository.findByStoreKey(storeKey)
+                .orElseThrow(() -> new IllegalArgumentException("해당 storeKey 정보 없음"));
 
-
-
-
-
+        return store;
+    }
 }
