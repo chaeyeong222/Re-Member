@@ -49,8 +49,11 @@ public class EntranceController {
                     new UserStatusResponseDto(true, bookingUrl)
             );
         } else {
-            String finalRedirectUrl = "http://localhost:3000/booking/" + storeKey;
-            String waitingRoomUrl = "http://localhost:3000/waiting-room?queue=%s&user_id=%d&redirect_url=%s".formatted(
+//            String finalRedirectUrl = "http://localhost:3000/booking/" + storeKey;
+//            String waitingRoomUrl = "http://localhost:3000/waiting-room?queue=%s&user_id=%d&redirect_url=%s".formatted(
+//                    queue, userId, finalRedirectUrl);
+            String finalRedirectUrl = "/booking/" + storeKey;
+            String waitingRoomUrl = "/waiting-room?queue=%s&user_id=%d&redirect_url=%s".formatted(
                     queue, userId, finalRedirectUrl);
             return ResponseEntity.ok(
                     new UserStatusResponseDto(false, waitingRoomUrl)
