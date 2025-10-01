@@ -1,6 +1,8 @@
 package com.cy.rememeber.controller;
 
+import com.cy.rememeber.Entity.Customer;
 import com.cy.rememeber.Entity.VisitHistory;
+import com.cy.rememeber.dto.request.AddCustomerRequestDto;
 import com.cy.rememeber.dto.response.FindCustomerDto;
 import com.cy.rememeber.service.CustomerService;
 import java.util.List;
@@ -55,4 +57,9 @@ public class CustomerController {
         return new ResponseEntity<>(histories, HttpStatus.OK);
     }
 
+//    @PostMapping("/addCustomer")
+//    public ResponseEntity<?> addCustomer(@RequestBody AddCustomerRequestDto dto) {
+//        Customer savedCustomer = customerService.addCustomer(dto);
+//        return new ResponseEntity<>(savedCustomer, HttpStatus.CREATED);
+//    }
 }
