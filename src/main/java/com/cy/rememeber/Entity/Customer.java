@@ -26,10 +26,8 @@ public class Customer {
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long customerKey; //고객키
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_key", nullable = false)
-    private User user; //실제 고객 정보
+    private String customerName;
+    private String customerPhone;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_key")

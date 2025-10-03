@@ -1,6 +1,7 @@
 package com.cy.rememeber.controller;
 
 import com.cy.rememeber.Entity.Customer;
+import com.cy.rememeber.Entity.User;
 import com.cy.rememeber.Entity.VisitHistory;
 import com.cy.rememeber.dto.request.AddCustomerRequestDto;
 import com.cy.rememeber.dto.response.FindCustomerDto;
@@ -8,6 +9,7 @@ import com.cy.rememeber.service.CustomerService;
 import java.util.List;
 
 import com.cy.rememeber.service.VisitHistoryService;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -55,6 +57,16 @@ public class CustomerController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(histories, HttpStatus.OK);
+    }
+
+    // customerKey(Long)로 고객 정보 조회 (프론트엔드에서 사용)
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getUserByCustomerKey(@PathVariable("id") Long customerKey) {
+        Optional<Customer> customer = customerService.getUserByCustomerKey(customerKey);
+        if (customer == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(customer, HttpStatus.OK);
     }
 
 //    @PostMapping("/addCustomer")

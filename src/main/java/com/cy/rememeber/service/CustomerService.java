@@ -1,11 +1,10 @@
 package com.cy.rememeber.service;
 
 import com.cy.rememeber.Entity.Customer;
-import com.cy.rememeber.dto.request.AddCustomerRequestDto;
-import com.cy.rememeber.dto.response.CustomerDetailDto;
 import com.cy.rememeber.dto.response.FindCustomerDto;
 import com.cy.rememeber.repository.CustomerRepository;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
@@ -18,30 +17,30 @@ import org.springframework.stereotype.Service;
 public class CustomerService {
     private final CustomerRepository customerRepository;
 
-//    public List<FindCustomerDto> getCustomers(){
-//        return customerRepository.findAll();
-//    }
-
     /**
      * 고객 조회 - 이름
      * */
     public List<FindCustomerDto> getCustomer(String customerName){
-        return customerRepository.findByUser_UserNameContaining(customerName);
+        return customerRepository.findByCustomerNameContaining(customerName);
     }
 
     /**
      * 고객 조회 - 번호
      * */
     public List<FindCustomerDto> getPhone(String customerPhone){
-        return customerRepository.findByUser_PhoneContaining(customerPhone);
+        return customerRepository.findByCustomerPhoneContaining(customerPhone);
     }
 
     public List<FindCustomerDto> getAllCustomers(Long storeKey) {
-        List<Customer> customers = customerRepository.findAllByStoreKeyWithUser(storeKey);
+        List<Customer> customers = customerRepository.findByStore_StoreKey(storeKey);
 
         return customers.stream()
                 .map(FindCustomerDto::from) // 정적 팩토리 메소드 참조
                 .collect(Collectors.toList());
+    }
+
+    public Optional<Customer> getUserByCustomerKey(Long customerKey) {
+        return customerRepository.findByCustomerKey(customerKey);
     }
 
 //    public Customer addCustomer(AddCustomerRequestDto dto) {
