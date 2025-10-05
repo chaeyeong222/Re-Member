@@ -62,7 +62,7 @@ public class CustomerController {
     // customerKey(Long)로 고객 정보 조회 (프론트엔드에서 사용)
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserByCustomerKey(@PathVariable("id") Long customerKey) {
-        Optional<Customer> customer = customerService.getUserByCustomerKey(customerKey);
+        FindCustomerDto customer = customerService.getUserByCustomerKey(customerKey);
         if (customer == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

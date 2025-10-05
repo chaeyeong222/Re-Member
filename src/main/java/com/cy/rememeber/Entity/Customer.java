@@ -1,5 +1,6 @@
 package com.cy.rememeber.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,7 +32,8 @@ public class Customer {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_key")
-    private Store store; //이 고객이 속한 가게
+    @JsonIgnoreProperties({"customers", "hibernateLazyInitializer", "handler"}) // ✅ 추가!
+    private Store store; //고객이 속한 가게
 
     private int visitCnt; //방문횟수
     private String memo; //메모

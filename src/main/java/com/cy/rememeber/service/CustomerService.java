@@ -39,8 +39,9 @@ public class CustomerService {
                 .collect(Collectors.toList());
     }
 
-    public Optional<Customer> getUserByCustomerKey(Long customerKey) {
-        return customerRepository.findByCustomerKey(customerKey);
+    public FindCustomerDto getUserByCustomerKey(Long customerKey) {
+        Customer customer = customerRepository.findByCustomerKey(customerKey);
+        return FindCustomerDto.from(customer);
     }
 
 //    public Customer addCustomer(AddCustomerRequestDto dto) {
