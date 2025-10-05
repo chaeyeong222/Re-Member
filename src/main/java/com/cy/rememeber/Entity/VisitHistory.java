@@ -25,7 +25,6 @@ public class VisitHistory {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Customer customer; //
 
-    @Column(nullable = false)
     private Timestamp visitDate; //
 
     private int amount; //

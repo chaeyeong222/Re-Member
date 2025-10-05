@@ -3,7 +3,6 @@ package com.cy.rememeber.service;
 import com.cy.rememeber.Entity.Store;
 import com.cy.rememeber.Entity.User;
 import com.cy.rememeber.dto.StoreSignDto;
-import com.cy.rememeber.dto.response.StoreInfoResponseDto;
 import com.cy.rememeber.repository.StoreRepository;
 import com.cy.rememeber.repository.UserRepository;
 import java.util.List;

@@ -1,8 +1,12 @@
 package com.cy.rememeber.service;
 
 import com.cy.rememeber.Entity.Customer;
+import com.cy.rememeber.Entity.Store;
+import com.cy.rememeber.dto.request.AddCustomerRequestDto;
 import com.cy.rememeber.dto.response.FindCustomerDto;
 import com.cy.rememeber.repository.CustomerRepository;
+import com.cy.rememeber.repository.StoreRepository;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -16,6 +20,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CustomerService {
     private final CustomerRepository customerRepository;
+    private final StoreRepository storeRepository;
 
     /**
      * 고객 조회 - 이름
@@ -44,15 +49,22 @@ public class CustomerService {
         return FindCustomerDto.from(customer);
     }
 
-//    public Customer addCustomer(AddCustomerRequestDto dto) {
-//        Customer customer = Customer.builder()
-//            .name(dto.getName())
-//            .phone(dto.getPhone())
-//            .storeKey(dto.getStoreKey())
-//            .memo(dto.getMemo())
-//            .build();
-//
-//        return customerRepository.save(customer);
-//    }
+    public Customer addCustomer(AddCustomerRequestDto addCustomerRequestDto) {
+        Store store = storeRepository.findById(addCustomerRequestDto.getStoreKey())
+            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 가게입니다."));
+
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+
+        Customer customer = Customer.builder()
+            .customerName(addCustomerRequestDto.getCustomerName())
+            .customerPhone(addCustomerRequestDto.getCustomerPhone())
+            .store(store)
+            .memo(addCustomerRequestDto.getMemo())
+            .visitCnt(0)
+            .joinDate(now)
+            .lastVisit(now)
+            .build();
+        return customerRepository.save(customer);
+    }
 
 }

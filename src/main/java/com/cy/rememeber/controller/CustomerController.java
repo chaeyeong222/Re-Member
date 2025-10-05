@@ -69,9 +69,9 @@ public class CustomerController {
         return new ResponseEntity<>(customer, HttpStatus.OK);
     }
 
-//    @PostMapping("/addCustomer")
-//    public ResponseEntity<?> addCustomer(@RequestBody AddCustomerRequestDto dto) {
-//        Customer savedCustomer = customerService.addCustomer(dto);
-//        return new ResponseEntity<>(savedCustomer, HttpStatus.CREATED);
-//    }
+    @PostMapping("/addCustomer")
+    public ResponseEntity<?> addCustomer(@RequestBody AddCustomerRequestDto dto) {
+        Customer savedCustomer = customerService.addCustomer(dto);
+        return new ResponseEntity<>(savedCustomer, HttpStatus.CREATED);
+    }
 }

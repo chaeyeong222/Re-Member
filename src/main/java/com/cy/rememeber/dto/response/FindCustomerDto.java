@@ -2,9 +2,6 @@ package com.cy.rememeber.dto.response;
 
 import com.cy.rememeber.Entity.Customer;
 import lombok.*;
-
-import java.sql.Timestamp;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -26,9 +23,9 @@ public class FindCustomerDto {
                 .customerPhone(customer.getCustomerPhone())
                 .visitCnt(customer.getVisitCnt())
                 .memo(customer.getMemo())
-                .lastVisit(customer.getLastVisit().toString())
-                .joinDate(customer.getJoinDate().toString())
-                .build();
+                .lastVisit(customer.getLastVisit() != null ? customer.getLastVisit().toString() : null)
+            .joinDate(customer.getJoinDate() != null ? customer.getJoinDate().toString() : null)
+            .build();
     }
 
 
