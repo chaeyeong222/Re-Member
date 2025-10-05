@@ -2,7 +2,6 @@ package com.cy.rememeber.controller;
 
 import com.cy.rememeber.Entity.Store;
 import com.cy.rememeber.dto.StoreSignDto;
-import com.cy.rememeber.dto.response.StoreInfoResponseDto;
 import com.cy.rememeber.service.StoreService;
 import com.cy.rememeber.service.UserService;
 import java.util.List;

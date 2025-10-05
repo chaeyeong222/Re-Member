@@ -14,6 +14,6 @@ import lombok.Setter;
 public class AddCustomerRequestDto {
     private String customerName;
     private String customerPhone;
-    private String storeKey;
+    private Long storeKey;
     private String memo;
 }
