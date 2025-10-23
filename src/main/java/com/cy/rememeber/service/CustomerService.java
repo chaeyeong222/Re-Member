@@ -30,7 +30,7 @@ public class CustomerService {
     }
 
     /**
-     * 고객 조회 - 번호
+     * 고객 조회 - 번호$
      * */
     public List<FindCustomerDto> getPhone(String customerPhone){
         return customerRepository.findByCustomerPhoneContaining(customerPhone);

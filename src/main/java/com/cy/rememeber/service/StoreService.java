@@ -60,8 +60,8 @@ public class StoreService {
     }
 
     public List<Store> getStoreList(){
-        return storeRepository.findTop5ByOrderByStoreKeyAsc();
-//        return storeRepository.findAll();
+//        return storeRepository.findTop5ByOrderByStoreKeyAsc();
+        return storeRepository.findAll();
     }
 
     public List<Store> findStoreByStoreName(String keyword){
