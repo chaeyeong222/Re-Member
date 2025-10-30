@@ -50,8 +50,6 @@ public class StoreService {
      * @return Store
      */
     public Store getStoreBySocialId(String socialId) {
-        System.out.println("가게잇나?");
-        System.out.println(socialId);
         User user = userRepository.findBySocialId(socialId)
             .orElseThrow(() -> new IllegalArgumentException("해당 소셜 ID 유저 없음"));
 

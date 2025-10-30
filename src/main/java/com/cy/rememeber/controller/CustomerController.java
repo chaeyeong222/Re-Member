@@ -4,6 +4,7 @@ import com.cy.rememeber.Entity.Customer;
 import com.cy.rememeber.Entity.User;
 import com.cy.rememeber.Entity.VisitHistory;
 import com.cy.rememeber.dto.request.AddCustomerRequestDto;
+import com.cy.rememeber.dto.request.AddVisitHistoryRequestDto;
 import com.cy.rememeber.dto.response.FindCustomerDto;
 import com.cy.rememeber.service.CustomerService;
 import java.util.List;
@@ -57,6 +58,18 @@ public class CustomerController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(histories, HttpStatus.OK);
+    }
+
+    @PostMapping("/{id}/customerHistory")
+    public ResponseEntity<?> addCustomerHistory(
+            @PathVariable("id") Long customerKey,
+            @RequestBody AddVisitHistoryRequestDto dto) {
+
+        // PathVariable과 RequestBody의 customerKey가 일치하도록 설정
+        dto.setCustomerKey(customerKey);
+
+        VisitHistory savedHistory = visitHistoryService.addVisitHistory(dto);
+        return new ResponseEntity<>(savedHistory, HttpStatus.CREATED);
     }
 
     // customerKey(Long)로 고객 정보 조회 (프론트엔드에서 사용)
