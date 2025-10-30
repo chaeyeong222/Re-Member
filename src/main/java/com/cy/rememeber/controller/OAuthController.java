@@ -25,7 +25,7 @@ public class OAuthController {
 
     @GetMapping("/check")
     public String check(){
-        System.out.println("dkdkdkdk");
+        System.out.println("enter check");
         return "OK";
     }
     @PostMapping("/login")

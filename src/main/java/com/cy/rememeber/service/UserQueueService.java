@@ -130,7 +130,7 @@ public class UserQueueService {
         if(!scheduling) return;
 
         log.info("called scheduling.....");
-        var maxAllowUserCount = 3L;
+        var maxAllowUserCount = 100L;
 
         // SCAN 명령어를 사용하기 위해 RedisTemplate을 통해 RedisConnection에 접근
         redisTemplate.execute((RedisCallback<Void>) connection -> {
