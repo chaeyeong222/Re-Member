@@ -3,10 +3,12 @@ package com.cy.rememeber.service;
 import com.cy.rememeber.Entity.Customer;
 import com.cy.rememeber.Entity.Reservation;
 import com.cy.rememeber.Entity.ReservationStatus;
+import com.cy.rememeber.Entity.Store;
 import com.cy.rememeber.Entity.VisitHistory;
 import com.cy.rememeber.dto.request.CompleteReservationRequestDto;
 import com.cy.rememeber.repository.CustomerRepository;
 import com.cy.rememeber.repository.ReservationRepository;
+import com.cy.rememeber.repository.StoreRepository;
 import com.cy.rememeber.repository.VisitHistoryRepository;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -24,6 +26,7 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final CustomerRepository customerRepository;
     private final VisitHistoryRepository visitHistoryRepository;
+    private final StoreRepository storeRepository;
 
     /**
      * 예약
@@ -82,6 +85,7 @@ public class ReservationService {
 
     /**
      * 예약 완료 처리 + 고객 히스토리 자동 추가
+     * 고객이 없으면 자동으로 생성
      */
     @Transactional
     public Reservation completeReservation(Long reservationKey, CompleteReservationRequestDto dto) {
@@ -98,10 +102,27 @@ public class ReservationService {
         reservation.setMemo(dto.getMemo());
         reservationRepository.save(reservation);
 
-        // 3. 고객 조회
+        // 3. 고객 조회 또는 생성
         Customer customer = customerRepository.findByCustomerKey(reservation.getCustomerId());
         if (customer == null) {
-            throw new IllegalArgumentException("존재하지 않는 고객입니다.");
+            // 고객이 없으면 자동 생성
+            log.info("고객이 존재하지 않아 자동 생성합니다. customerId={}", reservation.getCustomerId());
+
+            Store store = storeRepository.findById(reservation.getStoreKey())
+                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 가게입니다."));
+
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+            customer = Customer.builder()
+                    .customerName(dto.getCustomerName())
+                    .customerPhone(dto.getCustomerPhone())
+                    .store(store)
+                    .visitCnt(0)
+                    .joinDate(now)
+                    .lastVisit(now)
+                    .build();
+            customer = customerRepository.save(customer);
+
+            log.info("고객 생성 완료: customerKey={}, customerName={}", customer.getCustomerKey(), customer.getCustomerName());
         }
 
         // 4. VisitHistory 자동 생성

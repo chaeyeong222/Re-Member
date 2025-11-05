@@ -17,4 +17,6 @@ import lombok.Setter;
 public class CompleteReservationRequestDto {
     private Integer amount;
     private String memo;
+    private String customerName;   // 고객 이름 (고객이 없을 경우 자동 생성에 사용)
+    private String customerPhone;  // 고객 전화번호 (고객이 없을 경우 자동 생성에 사용)
 }

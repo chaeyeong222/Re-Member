@@ -60,7 +60,7 @@ public class CustomerController {
         return new ResponseEntity<>(histories, HttpStatus.OK);
     }
 
-    @PostMapping("/{id}/customerHistory")
+    @PostMapping("/{id}/editCustomerHistory")
     public ResponseEntity<?> addCustomerHistory(
             @PathVariable("id") Long customerKey,
             @RequestBody AddVisitHistoryRequestDto dto) {
