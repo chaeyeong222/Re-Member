@@ -33,6 +33,7 @@ public class Reservation {
     private Long storeKey;
 
     private String reservationName;
+    private String reservationPhone;
     private Timestamp reservationDateTime;
 
     @Enumerated(EnumType.STRING)
@@ -46,6 +47,17 @@ public class Reservation {
         this.customerId = customerId;
         this.storeKey = storeKey;
         this.reservationDateTime = Timestamp.valueOf(reservedAt);
+        this.reservationStatus = ReservationStatus.RESERVED;
+    }
+
+    // 예약자 정보 포함 생성자
+    public Reservation(Long customerId, Long storeKey, LocalDateTime reservedAt,
+                       String reservationName, String reservationPhone) {
+        this.customerId = customerId;
+        this.storeKey = storeKey;
+        this.reservationDateTime = Timestamp.valueOf(reservedAt);
+        this.reservationName = reservationName;
+        this.reservationPhone = reservationPhone;
         this.reservationStatus = ReservationStatus.RESERVED;
     }
 }

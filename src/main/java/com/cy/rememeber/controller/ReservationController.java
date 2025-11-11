@@ -3,6 +3,7 @@ package com.cy.rememeber.controller;
 import com.cy.rememeber.Entity.Reservation;
 import com.cy.rememeber.Entity.ReservationStatus;
 import com.cy.rememeber.dto.request.CompleteReservationRequestDto;
+import com.cy.rememeber.dto.request.ReservationRequestDto;
 import com.cy.rememeber.service.ReservationService;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -30,14 +31,23 @@ public class ReservationController {
 
     private final ReservationService reservationService;
 
-    // 예약 생성
+    // 예약 생성 (예약자 정보 포함)
     @PostMapping
-    public ResponseEntity<Reservation> createReservation(
+    public ResponseEntity<Reservation> createReservation(@RequestBody ReservationRequestDto dto) {
+        log.info("예약 생성: store={}, name={}, phone={}, time={}",
+                dto.getStoreKey(), dto.getReservationName(), dto.getReservationPhone(), dto.getReservedAt());
+        Reservation newReservation = reservationService.makeReservation(dto);
+        return ResponseEntity.ok(newReservation);
+    }
+
+    // 예약 생성 (레거시 - 기존 호환성 유지)
+    @PostMapping("/legacy")
+    public ResponseEntity<Reservation> createReservationLegacy(
         @RequestParam Long userId,
         @RequestParam Long storeKey,
         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime reservedAt) {
 
-        log.info("reservationInfo: userId={}, storeKey={}, reservedAt={}",userId, storeKey, reservedAt);
+        log.info("reservationInfo (legacy): userId={}, storeKey={}, reservedAt={}",userId, storeKey, reservedAt);
         Reservation newReservation = reservationService.makeReservation(userId, storeKey, reservedAt);
         return ResponseEntity.ok(newReservation);
     }
@@ -81,8 +91,8 @@ public class ReservationController {
     public ResponseEntity<Reservation> completeReservation(
             @PathVariable Long reservationKey,
             @RequestBody CompleteReservationRequestDto dto) {
-        log.info("예약 완료 처리: reservationKey={}, amount={}, memo={}",
-                reservationKey, dto.getAmount(), dto.getMemo());
+        log.info("예약 완료 처리 요청: reservationKey={}, amount={}, memo={}, customerName={}, customerPhone={}",
+                reservationKey, dto.getAmount(), dto.getMemo(), dto.getReservationName(), dto.getReservationPhone());
         Reservation reservation = reservationService.completeReservation(reservationKey, dto);
         return ResponseEntity.ok(reservation);
     }
