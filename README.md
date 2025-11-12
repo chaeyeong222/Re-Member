@@ -59,25 +59,30 @@
 <img width="600" height="400" alt="Image" src="https://github.com/user-attachments/assets/6be19cb8-9561-44e6-8540-81454ed5d6ef" />
 
 ---
-## 📱 화면 구성
+# 📱 화면 구성
 
-### 고객 화면
-> 가게 목록 검색, 예약 시 대기열 등록
+## 고객 화면
+### 가게 목록 검색, 예약 시 대기열 등록
 <img src="https://github.com/user-attachments/assets/ec69263f-4ec3-4137-bb65-504801c2452b"  width="400" height="800"/>
 
-> 예약하기
+### 예약하기
 <img src="https://github.com/user-attachments/assets/c6c9fd29-cf37-4076-a667-59a1ecd6c2e7"  width="400" height="800"/>
 
-### 사업자 화면
-> 고객 목록 (관리)
+## 사업자 화면
+### 고객 목록 (관리)
 <img src="https://github.com/user-attachments/assets/d4f7f01c-2fa2-4564-89aa-536122ac88db"  width="400" height="800"/>
 <img src="https://github.com/user-attachments/assets/6b191249-cf12-4f8a-8ccc-991dc0ad8809"  width="400" height="800"/>
 
-> 고객 별 히스토리 관리
+### 고객 별 히스토리 관리
 <img src="https://github.com/user-attachments/assets/1501a5e0-e990-4597-bdd9-7177dc9f56d7"  width="400" height="800"/>
 <img src="https://github.com/user-attachments/assets/fbe6a2b3-cad8-42a2-ba53-633f4671ae50"  width="400" height="800"/>
 
-> 새로운 고객 추가
+### 새로운 고객 추가
 <img src="https://github.com/user-attachments/assets/9910fa6f-ef78-4499-b72d-ef2360a9a861"  width="400" height="800"/>
 
-
+### 고객 예약 처리 시 히스토리 자동 연동
+<img src="https://github.com/user-attachments/assets/1d4bf536-04e1-4a9e-a054-208ee8cb460c"  width="400" height="800"/>
+<img src="https://github.com/user-attachments/assets/2f7539cb-b9e9-4e10-ab2a-9821f579f307"  width="400" height="800"/>
+<br/>
+> 날짜별, 상태별 조회 가능
+<img src="https://github.com/user-attachments/assets/5ce5b95e-4972-42ce-acde-8e1d60491f50"  width="400" height="800"/>
