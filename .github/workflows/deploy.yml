@@ -41,15 +41,5 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          script_stop: false
           script: |
-            cd /home/${{ secrets.EC2_USERNAME }}/app
-            
-            # 기존 프로세스 종료 (에러 무시)
-            pkill -f 'java.*jar' || true
-            sleep 5
-            
-            # 새 애플리케이션 시작
-            nohup java -jar *.jar > application.log 2>&1 &
-            
-            echo "Application deployed successfully"
+            bash /home/${{ secrets.EC2_USERNAME }}/deploy.sh
