@@ -44,19 +44,9 @@ jobs:
           script: |
             cd /home/${{ secrets.EC2_USERNAME }}/app
             
-            # 기존 프로세스 종료
-            PID=$(pgrep -f 'java.*jar' | head -1)
-            if [ ! -z "$PID" ]; then
-              echo "Stopping application (PID: $PID)"
-              kill $PID || true  # 에러 무시
-              sleep 5
-            
-              # 프로세스가 여전히 살아있으면 강제 종료
-              if ps -p $PID > /dev/null 2>&1; then
-                echo "Force killing application"
-                kill -9 $PID || true
-              fi
-            fi
+            # 기존 프로세스 종료 (에러 무시)
+            pkill -f 'java.*jar' || true
+            sleep 5
             
             # 새 애플리케이션 시작
             nohup java -jar *.jar > application.log 2>&1 &
