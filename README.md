@@ -82,6 +82,10 @@
 
 ### 고객 예약 처리 시 히스토리 자동 연동
 <img src="https://github.com/user-attachments/assets/1d4bf536-04e1-4a9e-a054-208ee8cb460c"  width="400" height="800"/>
+
+## 성능테스트
+- jmeter 활용
+  
 <img src="https://github.com/user-attachments/assets/2f7539cb-b9e9-4e10-ab2a-9821f579f307"  width="400" height="800"/>
 
 > 날짜별, 상태별 조회 가능
