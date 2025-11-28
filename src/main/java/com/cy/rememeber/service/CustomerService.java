@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -25,6 +26,7 @@ public class CustomerService {
     /**
      * 고객 조회 - 이름
      * */
+    @Transactional(readOnly = true)
     public List<FindCustomerDto> getCustomer(String customerName){
         return customerRepository.findByCustomerNameContaining(customerName);
     }
@@ -32,10 +34,12 @@ public class CustomerService {
     /**
      * 고객 조회 - 번호$
      * */
+    @Transactional(readOnly = true)
     public List<FindCustomerDto> getPhone(String customerPhone){
         return customerRepository.findByCustomerPhoneContaining(customerPhone);
     }
 
+    @Transactional(readOnly = true)
     public List<FindCustomerDto> getAllCustomers(Long storeKey) {
         List<Customer> customers = customerRepository.findByStore_StoreKey(storeKey);
 

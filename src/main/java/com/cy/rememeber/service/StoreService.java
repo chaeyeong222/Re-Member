@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Slf4j
@@ -49,6 +50,7 @@ public class StoreService {
      * @param socialId 유저 소셜 ID
      * @return Store
      */
+    @Transactional(readOnly = true)
     public Store getStoreBySocialId(String socialId) {
         User user = userRepository.findBySocialId(socialId)
             .orElseThrow(() -> new IllegalArgumentException("해당 소셜 ID 유저 없음"));
@@ -57,6 +59,7 @@ public class StoreService {
             .orElse(null);
     }
 
+    @Transactional(readOnly = true)
     public List<Store> getStoreList(){
 //        return storeRepository.findTop5ByOrderByStoreKeyAsc();
         return storeRepository.findAll();
@@ -70,6 +73,7 @@ public class StoreService {
      * @param storeKey 유저 소셜 ID
      * @return Store
      */
+    @Transactional(readOnly = true)
     public Store getStoreByStoreKey(Long storeKey) {
         log.info("storeKey: {} 로 조회", storeKey);
         Store store = storeRepository.findByStoreKey(storeKey)
