@@ -1,6 +1,7 @@
 package com.cy.rememeber.controller;
 
 import com.cy.rememeber.Entity.Reservation;
+import com.cy.rememeber.service.ReservationFacade;
 import com.cy.rememeber.Entity.ReservationStatus;
 import com.cy.rememeber.dto.request.CompleteReservationRequestDto;
 import com.cy.rememeber.dto.request.ReservationRequestDto;
@@ -9,10 +10,8 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,13 +29,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReservationController {
 
     private final ReservationService reservationService;
+    private final ReservationFacade reservationFacade;
 
     // 예약 생성 (예약자 정보 포함)
     @PostMapping
     public ResponseEntity<Reservation> createReservation(@RequestBody ReservationRequestDto dto) {
         log.info("예약 생성: store={}, name={}, phone={}, time={}",
                 dto.getStoreKey(), dto.getReservationName(), dto.getReservationPhone(), dto.getReservedAt());
-        Reservation newReservation = reservationService.makeReservation(dto);
+        Reservation newReservation = reservationFacade.makeReservation(dto);
         return ResponseEntity.ok(newReservation);
     }
 

@@ -32,9 +32,11 @@ dependencies {
 
 	//redis 사용을 위한 추가
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.redisson:redisson-spring-boot-starter:3.23.5' //redisson사용을 위한 추가
 	testImplementation 'com.github.codemonstur:embedded-redis:1.0.0'
 	//타임리프 추가
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
 
 }
 compileJava.options.encoding='UTF-8'
